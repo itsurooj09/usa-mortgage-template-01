@@ -5,7 +5,6 @@ import { Logo } from "../ui/Logo";
 import {
   EqualHousingBadge,
   SslEncryptionBadge,
-  PrivacySecurityGuaranteedBadge,
 } from "../ui/TrustBadges";
 
 export function Footer() {
@@ -144,14 +143,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Official Trust & Security Badges Row (media_1792740643933.png & media_1792740672494.png) */}
-        <div className="mt-12 pt-8 border-t border-navy-light/40 flex flex-col md:flex-row items-center justify-between gap-6 bg-navy-dark/60 rounded-2xl p-6 border border-navy-light/20">
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-8 sm:gap-12">
-            <EqualHousingBadge variant="dark" />
-            <SslEncryptionBadge variant="dark" />
-          </div>
-          <PrivacySecurityGuaranteedBadge />
-        </div>
+
 
         {/* NMLS Disclosures & Statutory Regulatory Notice */}
         <div className="mt-8 pt-8 border-t border-navy-light/30 text-xs text-slate-400 space-y-3 leading-relaxed">
