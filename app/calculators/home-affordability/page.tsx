@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
-import { HomeAffordabilityCalculator } from "@/components/calculators/HomeAffordabilityCalculator";
+import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
 import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
@@ -29,9 +29,13 @@ export default function HomeAffordabilityPage() {
   return (
     <div className="py-12 bg-ivory-warm min-h-screen">
       <Container>
-        <HomeAffordabilityCalculator />
+        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
+          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+            <VonkMasterCalculatorSuite initialTab="afford" />
+          </Suspense>
+        </div>
 
-        <div className="mt-16 max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
             Affordability & Debt-to-Income Guidelines
           </h2>

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
-import { VaLoanCalculator } from "@/components/calculators/VaLoanCalculator";
+import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
 import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
@@ -29,21 +29,13 @@ export default function VaLoanCalculatorPage() {
   return (
     <div className="py-12 bg-ivory-warm min-h-screen">
       <Container>
-        <div className="max-w-3xl mb-8">
-          <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
-            Military Benefit Tool
-          </span>
-          <h1 className="font-heading font-black text-3xl sm:text-4xl text-navy-midnight mt-1">
-            VA Loan Calculator
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 mt-2">
-            Calculate your monthly payment with zero down payment, funding fee tiers, service-connected disability fee exemptions, and $0 monthly PMI.
-          </p>
+        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
+          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+            <VonkMasterCalculatorSuite initialTab="vapurchase" />
+          </Suspense>
         </div>
 
-        <VaLoanCalculator />
-
-        <div className="mt-16 max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
             VA Financing Guidelines & Entitlement
           </h2>

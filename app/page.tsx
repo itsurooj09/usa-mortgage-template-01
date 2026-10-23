@@ -12,7 +12,7 @@ import { loanProducts } from "@/content/loans";
 import { currentRates, rateMetadata } from "@/content/rates";
 import { testimonialsData } from "@/content/testimonials";
 import { allFaqs } from "@/content/faqs";
-import { MortgagePaymentCalculator } from "@/components/calculators/MortgagePaymentCalculator";
+import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
 import { Accordion } from "@/components/ui/Accordion";
 import { photoLibrary } from "@/content/assets";
 
@@ -523,16 +523,11 @@ export default function HomePage() {
       </section>
 
       {/* SECTION F: FEATURED CALCULATOR WORKSTATION */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-ivory-warm border-y border-slate-200" id="calculators">
         <Container>
-          <div className="max-w-3xl mb-10">
-            <SectionHeading
-              eyebrow="Live Math Engine"
-              title="Featured Mortgage Payment Calculator"
-              subtitle="Test real purchase scenarios with authentic principal, interest, taxes, insurance, and cancellable PMI calculations."
-            />
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
+            <VonkMasterCalculatorSuite initialTab="purchase" />
           </div>
-          <MortgagePaymentCalculator />
         </Container>
       </section>
 

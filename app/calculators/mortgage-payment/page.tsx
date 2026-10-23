@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
-import { MortgagePaymentCalculator } from "@/components/calculators/MortgagePaymentCalculator";
+import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
 import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ const calcFaqs = [
   },
   {
     question: "How are property taxes estimated?",
-    answer: "Our calculator applies a default 1.2% national average annual property tax rate, adjustable to your municipality's specific millage rate.",
+    answer: "Our calculator applies a default 1.1% national average annual property tax rate, adjustable to your municipality's specific millage rate.",
   },
 ];
 
@@ -29,22 +29,14 @@ export default function MortgagePaymentCalculatorPage() {
   return (
     <div className="py-12 bg-ivory-warm min-h-screen">
       <Container>
-        <div className="max-w-3xl mb-8">
-          <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
-            Interactive Calculator
-          </span>
-          <h1 className="font-heading font-black text-3xl sm:text-4xl text-navy-midnight mt-1">
-            Mortgage Payment Calculator
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 mt-2">
-            Model your estimated total monthly housing payment including principal, interest, taxes, homeowners insurance, and cancellable private mortgage insurance (PMI).
-          </p>
+        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
+          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+            <VonkMasterCalculatorSuite initialTab="purchase" />
+          </Suspense>
         </div>
 
-        <MortgagePaymentCalculator />
-
         {/* Informational Guidance */}
-        <div className="mt-16 max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
             Understanding Your Monthly Payment Components (PITI)
           </h2>
@@ -59,13 +51,9 @@ export default function MortgagePaymentCalculatorPage() {
               <strong className="text-navy-midnight block text-base font-heading mb-1">
                 Taxes & Insurance (T&I)
               </strong>
-              Collected monthly into an escrow impound account so your loan servicer can pay your county property tax bill and homeowners insurance policy on time.
+              Property taxes and homeowners hazard insurance are held in escrow reserves and disbursed annually by your loan servicer on your behalf.
             </div>
           </div>
-
-          <h3 className="font-heading font-bold text-xl text-navy-midnight mb-4">
-            Payment Calculation FAQs
-          </h3>
           <Accordion items={calcFaqs} />
         </div>
       </Container>
