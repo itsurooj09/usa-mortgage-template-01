@@ -6,6 +6,11 @@ import { Container } from "@/components/ui/Container";
 import { MortgageSurveyWizard } from "@/components/forms/MortgageSurveyWizard";
 import { siteConfig } from "@/lib/config/siteConfig";
 import { photoLibrary } from "@/content/assets";
+import {
+  EqualHousingBadge,
+  SslEncryptionBadge,
+  PrivacySecurityGuaranteedBadge,
+} from "@/components/ui/TrustBadges";
 
 export const metadata: Metadata = {
   title: "Get Pre-Approved | 2-Minute Digital Mortgage Survey | Northstar Mortgage",
@@ -129,14 +134,25 @@ export default function GetStartedPage({
                 </a>
               </div>
             </div>
+
+            {/* Official HUD & SSL Logos from Reference media_1792740643933.png */}
+            <div className="pt-2 flex flex-wrap items-center gap-8 border-t border-border-subtle">
+              <EqualHousingBadge variant="light" />
+              <SslEncryptionBadge variant="light" />
+            </div>
           </div>
 
           {/* Right Column: Mortgage Survey Wizard Container */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 space-y-6">
             <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl">
               <Suspense fallback={<div className="p-16 text-center text-slate-500 font-medium">Loading questionnaire...</div>}>
                 <MortgageSurveyWizard initialPurpose={searchParams.purpose} />
               </Suspense>
+            </div>
+
+            {/* Golden Padlock Badge from Reference media_1792740672494.png */}
+            <div className="flex justify-center">
+              <PrivacySecurityGuaranteedBadge />
             </div>
           </div>
         </div>

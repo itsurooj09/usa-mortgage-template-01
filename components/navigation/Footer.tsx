@@ -2,6 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/siteConfig";
 import { Logo } from "../ui/Logo";
+import {
+  EqualHousingBadge,
+  SslEncryptionBadge,
+  PrivacySecurityGuaranteedBadge,
+} from "../ui/TrustBadges";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -68,15 +73,10 @@ export function Footer() {
               </p>
             </div>
 
-            {/* Equal Housing Lender Graphic & Text */}
-            <div className="pt-3 flex items-center gap-3 text-xs text-slate-400">
-              <div className="w-8 h-8 rounded border border-slate-600 flex items-center justify-center font-serif text-base text-brass" title="Equal Housing Lender">
-                ⌂
-              </div>
-              <div>
-                <p className="font-semibold text-white">Equal Housing Lender</p>
-                <p className="text-[11px] text-slate-400">NMLS ID #{siteConfig.brand.nmlsId}</p>
-              </div>
+            {/* Official Trust Logos from Reference media_1792740643933.png */}
+            <div className="pt-4 flex flex-wrap items-center gap-6 border-t border-navy-light/30">
+              <EqualHousingBadge variant="dark" />
+              <SslEncryptionBadge variant="dark" />
             </div>
           </div>
 
@@ -144,8 +144,17 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Official Trust & Security Badges Row (media_1792740643933.png & media_1792740672494.png) */}
+        <div className="mt-12 pt-8 border-t border-navy-light/40 flex flex-col md:flex-row items-center justify-between gap-6 bg-navy-dark/60 rounded-2xl p-6 border border-navy-light/20">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-8 sm:gap-12">
+            <EqualHousingBadge variant="dark" />
+            <SslEncryptionBadge variant="dark" />
+          </div>
+          <PrivacySecurityGuaranteedBadge />
+        </div>
+
         {/* NMLS Disclosures & Statutory Regulatory Notice */}
-        <div className="mt-12 pt-8 border-t border-navy-light/30 text-xs text-slate-400 space-y-3 leading-relaxed">
+        <div className="mt-8 pt-8 border-t border-navy-light/30 text-xs text-slate-400 space-y-3 leading-relaxed">
           <p>
             <strong>Licensing & Regulatory Disclosures:</strong> {siteConfig.brand.legalName} is a licensed residential mortgage lender (NMLS Unique Identifier #{siteConfig.brand.nmlsId}). To verify licensing information, visit the nationwide database at{" "}
             <a
