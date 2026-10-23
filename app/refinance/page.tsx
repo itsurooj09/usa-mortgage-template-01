@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { RefinanceCalculator } from "@/components/calculators/RefinanceCalculator";
 import { ContextualLeadForm } from "@/components/forms/ContextualLeadForm";
+import { photoLibrary } from "@/content/assets";
 
 export const metadata: Metadata = {
   title: "Refinance Your Mortgage | Rate Reduction & Cash-Out Equity",
@@ -16,9 +18,20 @@ export const metadata: Metadata = {
 export default function RefinancePage() {
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-navy-midnight text-white py-16 lg:py-24 relative overflow-hidden">
-        <Container>
+      {/* Hero with photographic background */}
+      <section className="relative bg-navy-midnight text-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={photoLibrary.hero.mainHome.url}
+            alt={photoLibrary.hero.mainHome.alt}
+            fill
+            priority
+            className="object-cover object-center brightness-[0.25]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-midnight via-navy-midnight/90 to-navy-midnight/75" />
+        </div>
+
+        <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">
               <span className="text-xs font-bold uppercase tracking-wider text-brass">
@@ -31,10 +44,10 @@ export default function RefinancePage() {
                 Whether you want to lower your monthly interest rate, eliminate costly PMI, shorten your term to retire debt-free, or access cash for home renovations, our advisors calculate your exact break-even timeline down to the penny.
               </p>
               <div className="pt-2 flex flex-wrap gap-4">
-                <Button href="/get-started?purpose=refinance" variant="brass" size="lg" className="font-bold text-navy-deep">
+                <Button href="/get-started?purpose=refinance" variant="brass" size="lg" className="font-bold text-navy-deep shadow-lg">
                   Calculate Refinance Savings →
                 </Button>
-                <Button href="/calculators/refinance" variant="outline" size="lg" className="border-slate-500 text-white">
+                <Button href="/calculators/refinance" variant="outline" size="lg" className="border-slate-500 text-white hover:bg-white/10">
                   Interactive Refinance Tool
                 </Button>
               </div>
@@ -116,8 +129,55 @@ export default function RefinancePage() {
         </Container>
       </section>
 
+      {/* Editorial Equity & Renovation Feature */}
+      <section className="py-20 bg-white border-b border-border-subtle">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
+                Strategic Equity Extraction
+              </span>
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl text-navy-midnight leading-tight">
+                Reinvest Your Appreciated Equity Back Into What Matters.
+              </h2>
+              <p className="text-base text-slate-600 leading-relaxed">
+                Over the past several years, homeowners across the United States have accumulated historic levels of home equity. Cash-out refinancing allows you to tap up to 80% of your home&apos;s appraised value at low fixed mortgage rates—often a fraction of personal loan or credit card APRs.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle">
+                  <div className="text-xl font-black text-navy-midnight font-heading">Up to 80%</div>
+                  <div className="text-xs text-slate-600 mt-1">Conforming Cash-Out Loan-to-Value (LTV)</div>
+                </div>
+                <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle">
+                  <div className="text-xl font-black text-brass-dark font-heading">Tax-Deductible*</div>
+                  <div className="text-xs text-slate-600 mt-1">Interest may be deductible when used for capital home improvements</div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button href="/get-started?purpose=refinance" variant="brass" size="md" className="font-bold text-navy-deep">
+                  Explore Cash-Out Options →
+                </Button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 relative">
+              <div className="relative h-[400px] sm:h-[460px] rounded-2xl overflow-hidden shadow-card border border-border-subtle">
+                <Image
+                  src={photoLibrary.lifestyle.renovationPlanning.url}
+                  alt={photoLibrary.lifestyle.renovationPlanning.alt}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* Featured Refinance Calculator Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-ivory-warm">
         <Container>
           <div className="max-w-3xl mb-10">
             <SectionHeading

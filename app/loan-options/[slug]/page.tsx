@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
@@ -10,6 +11,32 @@ import { Accordion } from "@/components/ui/Accordion";
 import { ContextualLeadForm } from "@/components/forms/ContextualLeadForm";
 import { loanProducts } from "@/content/loans";
 import { siteConfig } from "@/lib/config/siteConfig";
+import { photoLibrary } from "@/content/assets";
+
+function getLoanPhoto(slug: string) {
+  switch (slug) {
+    case "conventional":
+      return photoLibrary.programs.conventional;
+    case "fha":
+      return photoLibrary.programs.fha;
+    case "va":
+      return photoLibrary.programs.va;
+    case "usda":
+      return photoLibrary.programs.usda;
+    case "jumbo":
+      return photoLibrary.programs.jumbo;
+    case "first-time-homebuyer":
+      return photoLibrary.programs.firstTime;
+    case "rate-and-term-refinance":
+      return photoLibrary.lifestyle.renovationPlanning;
+    case "cash-out-refinance":
+      return photoLibrary.hero.mainHome;
+    case "streamline-refinance":
+      return photoLibrary.consultation.digitalReview;
+    default:
+      return photoLibrary.hero.daytimeSuburban;
+  }
+}
 
 export async function generateStaticParams() {
   return loanProducts.map((loan) => ({
@@ -47,12 +74,24 @@ export default function LoanDetailPage({
   }
 
   const isRefi = loan.category === "Refinancing";
+  const loanPhoto = getLoanPhoto(loan.slug);
 
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-navy-midnight text-white py-16 lg:py-24 relative overflow-hidden">
-        <Container>
+      {/* Hero with photographic background */}
+      <section className="relative bg-navy-midnight text-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={loanPhoto.url}
+            alt={loanPhoto.alt}
+            fill
+            priority
+            className="object-cover object-center brightness-[0.22]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-midnight via-navy-midnight/95 to-navy-midnight/80" />
+        </div>
+
+        <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">
               <div className="flex items-center gap-2">
@@ -147,6 +186,23 @@ export default function LoanDetailPage({
               <p className="text-base text-slate-700 leading-relaxed">
                 {loan.detailedOverview}
               </p>
+
+              {/* Program Real Estate Imagery Banner */}
+              <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden shadow-card border border-border-subtle my-4">
+                <Image
+                  src={loanPhoto.url}
+                  alt={loanPhoto.alt}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-midnight/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-5 right-5 text-white">
+                  <span className="text-[11px] uppercase tracking-wider font-bold text-brass">
+                    {loan.title} Representative Architecture
+                  </span>
+                  <p className="text-sm font-medium drop-shadow mt-0.5">{loanPhoto.title}</p>
+                </div>
+              </div>
 
               {/* Key Benefits */}
               <div className="pt-6 border-t border-border-subtle">

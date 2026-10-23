@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { loanProducts } from "@/content/loans";
 import { ContextualLeadForm } from "@/components/forms/ContextualLeadForm";
+import { photoLibrary } from "@/content/assets";
 
 export const metadata: Metadata = {
   title: "Buy a Home | Residential Purchase Mortgages & Fast Pre-Approval",
@@ -22,9 +23,20 @@ export default function BuyAHomePage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-navy-midnight text-white py-16 lg:py-24 relative overflow-hidden">
-        <Container>
+      {/* Hero with authentic architectural photography */}
+      <section className="relative bg-navy-midnight text-white py-16 lg:py-24 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={photoLibrary.hero.daytimeSuburban.url}
+            alt={photoLibrary.hero.daytimeSuburban.alt}
+            fill
+            priority
+            className="object-cover object-center brightness-[0.25]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-midnight via-navy-midnight/90 to-navy-midnight/75" />
+        </div>
+
+        <Container className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">
               <span className="text-xs font-bold uppercase tracking-wider text-brass">
@@ -37,10 +49,10 @@ export default function BuyAHomePage() {
                 In today&apos;s real estate market, listing agents look for certainty. We provide ironclad underwritten pre-approvals and average 19-day closing turnarounds so your offers stand out.
               </p>
               <div className="pt-2 flex flex-wrap gap-4">
-                <Button href="/get-started?purpose=buy" variant="brass" size="lg" className="font-bold text-navy-deep">
+                <Button href="/get-started?purpose=buy" variant="brass" size="lg" className="font-bold text-navy-deep shadow-lg">
                   Get Pre-Approved to Buy →
                 </Button>
-                <Button href="/calculators/home-affordability" variant="outline" size="lg" className="border-slate-500 text-white">
+                <Button href="/calculators/home-affordability" variant="outline" size="lg" className="border-slate-500 text-white hover:bg-white/10">
                   Affordability Calculator
                 </Button>
               </div>
@@ -123,8 +135,86 @@ export default function BuyAHomePage() {
         </Container>
       </section>
 
+      {/* Editorial Story Section: First-time Homebuyer Milestone */}
+      <section className="py-20 bg-white border-b border-border-subtle">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 relative">
+              <div className="relative h-[420px] sm:h-[480px] rounded-2xl overflow-hidden shadow-card border border-border-subtle">
+                <Image
+                  src={photoLibrary.lifestyle.happyCoupleKeys.url}
+                  alt={photoLibrary.lifestyle.happyCoupleKeys.alt}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 bg-navy-midnight text-white p-5 rounded-xl border border-navy-light/40 shadow-xl hidden sm:block max-w-[240px]">
+                <div className="text-2xl font-black text-brass font-heading">19 Days</div>
+                <div className="text-xs text-slate-300 font-medium mt-1 leading-snug">
+                  Average underwriting to clear-to-close turnaround nationwide.
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 space-y-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
+                The Northstar Advantage
+              </span>
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl text-navy-midnight leading-tight">
+                Turn Pre-Qualification Into a Confident Closing Day.
+              </h2>
+              <p className="text-base text-slate-600 leading-relaxed">
+                A standard pre-qualification relies on self-reported estimates. Northstar takes the extra step of pre-underwriting your tax returns, bank statements, and credit history upfront. When you present an offer, listing agents and sellers view your financing as virtually cash-equivalent.
+              </p>
+
+              <div className="space-y-4 pt-2">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-brass/20 text-navy-midnight flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-sm">Pre-Underwritten Commitment</h4>
+                    <p className="text-xs text-slate-600 mt-0.5">
+                      Underwriter-backed approval letters eliminate financing contingency delays that scare sellers.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-brass/20 text-navy-midnight flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-sm">Dedicated Listing Agent Outreach</h4>
+                    <p className="text-xs text-slate-600 mt-0.5">
+                      Our loan officers personally call the seller&apos;s agent upon offer submission to vouch for your qualification.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-brass/20 text-navy-midnight flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
+                    ✓
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-sm">Closing Cost Transparency</h4>
+                    <p className="text-xs text-slate-600 mt-0.5">
+                      Itemized Loan Estimates guaranteed to match your final Closing Disclosure within statutory tolerances.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button href="/get-started?purpose=buy" variant="brass" size="md" className="font-bold text-navy-deep">
+                  Start Your Pre-Approval Now →
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* Available Purchase Loan Programs List */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-ivory-warm">
         <Container>
           <SectionHeading
             eyebrow="Directory"

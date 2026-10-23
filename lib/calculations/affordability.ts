@@ -1,16 +1,19 @@
 /**
  * Home Affordability Calculator
  * Calculates recommended and maximum purchase price based on Front-End & Back-End DTI.
+ * Supports primary borrower + co-borrower income, HOA dues, and customizable tax/insurance.
  */
 
 export interface AffordabilityInput {
   annualIncome: number;
+  coBorrowerAnnualIncome?: number;
   monthlyDebts: number;
   downPayment: number;
   interestRate: number;
   loanTermYears?: number; // default 30
   annualPropertyTaxRate?: number; // e.g. 1.2%
   annualHomeInsurance?: number; // e.g. 1400
+  monthlyHoa?: number;
   frontEndDtiMax?: number; // default 28%
   backEndDtiMax?: number; // default 36% conservative, 43% moderate, 50% max
 }
@@ -25,10 +28,13 @@ export interface AffordabilityTier {
   estimatedMonthlyTax: number;
   estimatedMonthlyInsurance: number;
   estimatedMonthlyPmi: number;
+  estimatedMonthlyHoa: number;
   estimatedMonthlyPAndI: number;
 }
 
 export interface AffordabilityResult {
+  borrowerMonthlyIncome: number;
+  coBorrowerMonthlyIncome: number;
   grossMonthlyIncome: number;
   monthlyDebts: number;
   downPayment: number;
@@ -67,7 +73,8 @@ function solveTier(
   backDti: number,
   tierName: "Conservative" | "Moderate" | "Aggressive",
   taxRate: number,
-  annualInsurance: number
+  annualInsurance: number,
+  monthlyHoa: number = 0
 ): AffordabilityTier {
   const frontMaxPayment = grossMonthlyIncome * (frontDti / 100);
   const backMaxPayment = Math.max(0, grossMonthlyIncome * (backDti / 100) - monthlyDebts);
@@ -77,13 +84,16 @@ function solveTier(
 
   // Iterative refinement to account for property tax and PMI relative to purchase price
   let estimatedPrice = Math.max(0, downPayment + maxHousingPayment * 150);
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const monthlyTax = (estimatedPrice * (taxRate / 100)) / 12;
     const loan = Math.max(0, estimatedPrice - downPayment);
     const ltv = estimatedPrice > 0 ? loan / estimatedPrice : 0;
     const monthlyPmi = ltv > 0.8 ? (loan * 0.0055) / 12 : 0;
 
-    const availablePAndI = Math.max(0, maxHousingPayment - monthlyTax - monthlyInsurance - monthlyPmi);
+    const availablePAndI = Math.max(
+      0,
+      maxHousingPayment - monthlyTax - monthlyInsurance - monthlyPmi - monthlyHoa
+    );
     const calculatedLoan = calculateMaxLoanFromMonthlyPAndI(availablePAndI, interestRate, termYears);
     estimatedPrice = calculatedLoan + downPayment;
   }
@@ -91,8 +101,13 @@ function solveTier(
   const finalLoan = Math.max(0, Math.round(estimatedPrice - downPayment));
   const finalPrice = Math.round(estimatedPrice);
   const finalTax = Math.round(((finalPrice * (taxRate / 100)) / 12) * 100) / 100;
-  const finalPmi = finalPrice > 0 && (finalLoan / finalPrice) > 0.8 ? Math.round(((finalLoan * 0.0055) / 12) * 100) / 100 : 0;
-  const finalPAndI = Math.round(Math.max(0, maxHousingPayment - finalTax - monthlyInsurance - finalPmi) * 100) / 100;
+  const finalPmi =
+    finalPrice > 0 && finalLoan / finalPrice > 0.8
+      ? Math.round(((finalLoan * 0.0055) / 12) * 100) / 100
+      : 0;
+  const finalPAndI = Math.round(
+    Math.max(0, maxHousingPayment - finalTax - monthlyInsurance - finalPmi - monthlyHoa) * 100
+  ) / 100;
 
   return {
     tierName,
@@ -104,25 +119,71 @@ function solveTier(
     estimatedMonthlyTax: finalTax,
     estimatedMonthlyInsurance: monthlyInsurance,
     estimatedMonthlyPmi: finalPmi,
+    estimatedMonthlyHoa: monthlyHoa,
     estimatedMonthlyPAndI: finalPAndI,
   };
 }
 
 export function calculateAffordability(input: AffordabilityInput): AffordabilityResult {
   const annualIncome = Math.max(0, input.annualIncome);
-  const grossMonthlyIncome = Math.round(annualIncome / 12);
+  const coBorrowerAnnualIncome = Math.max(0, input.coBorrowerAnnualIncome ?? 0);
+  const totalAnnualIncome = annualIncome + coBorrowerAnnualIncome;
+
+  const borrowerMonthlyIncome = Math.round(annualIncome / 12);
+  const coBorrowerMonthlyIncome = Math.round(coBorrowerAnnualIncome / 12);
+  const grossMonthlyIncome = Math.round(totalAnnualIncome / 12);
+
   const monthlyDebts = Math.max(0, input.monthlyDebts);
   const downPayment = Math.max(0, input.downPayment);
   const interestRate = Math.max(0.1, input.interestRate);
   const loanTermYears = input.loanTermYears || 30;
   const taxRate = input.annualPropertyTaxRate ?? 1.2;
   const annualInsurance = input.annualHomeInsurance ?? 1400;
+  const monthlyHoa = Math.max(0, input.monthlyHoa ?? 0);
 
-  const conservative = solveTier(grossMonthlyIncome, monthlyDebts, downPayment, interestRate, loanTermYears, 28, 36, "Conservative", taxRate, annualInsurance);
-  const moderate = solveTier(grossMonthlyIncome, monthlyDebts, downPayment, interestRate, loanTermYears, 31, 43, "Moderate", taxRate, annualInsurance);
-  const aggressive = solveTier(grossMonthlyIncome, monthlyDebts, downPayment, interestRate, loanTermYears, 36, 48, "Aggressive", taxRate, annualInsurance);
+  const conservative = solveTier(
+    grossMonthlyIncome,
+    monthlyDebts,
+    downPayment,
+    interestRate,
+    loanTermYears,
+    28,
+    36,
+    "Conservative",
+    taxRate,
+    annualInsurance,
+    monthlyHoa
+  );
+  const moderate = solveTier(
+    grossMonthlyIncome,
+    monthlyDebts,
+    downPayment,
+    interestRate,
+    loanTermYears,
+    31,
+    43,
+    "Moderate",
+    taxRate,
+    annualInsurance,
+    monthlyHoa
+  );
+  const aggressive = solveTier(
+    grossMonthlyIncome,
+    monthlyDebts,
+    downPayment,
+    interestRate,
+    loanTermYears,
+    36,
+    48,
+    "Aggressive",
+    taxRate,
+    annualInsurance,
+    monthlyHoa
+  );
 
   return {
+    borrowerMonthlyIncome,
+    coBorrowerMonthlyIncome,
     grossMonthlyIncome,
     monthlyDebts,
     downPayment,

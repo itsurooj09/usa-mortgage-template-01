@@ -5,6 +5,7 @@ import { calculateRefinance, RefinanceResult } from "@/lib/calculations/refinanc
 import { CurrencyInput, PercentageInput, Select, Checkbox } from "../forms/SpecialInputs";
 import { FormField } from "../forms/FormField";
 import { Button } from "../ui/Button";
+import { exportMortgageReport } from "@/lib/exportReport";
 
 export function RefinanceCalculator() {
   const [currentBalance, setCurrentBalance] = useState(380000);
@@ -38,13 +39,73 @@ export function RefinanceCalculator() {
     cashOutAmount,
   ]);
 
+  const handleReset = () => {
+    setCurrentBalance(380000);
+    setCurrentRate(7.25);
+    setRemainingTermYears(27);
+    setNewRate(5.875);
+    setNewTermYears(30);
+    setRefinanceCosts(4800);
+    setRollCostsIntoLoan(false);
+    setCashOutAmount(0);
+  };
+
+  const handleExportPDF = () => {
+    exportMortgageReport({
+      calculatorName: "Mortgage Refinance & Break-Even Analysis",
+      generatedDate: new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+      inputs: [
+        { label: "Current Mortgage Balance", value: `$${currentBalance.toLocaleString()}` },
+        { label: "Current Interest Rate", value: `${currentRate}%` },
+        { label: "Remaining Term", value: `${remainingTermYears} Years` },
+        { label: "Proposed New Rate", value: `${newRate}%` },
+        { label: "New Loan Duration", value: `${newTermYears} Years` },
+        { label: "Estimated Refinance Closing Costs", value: `$${refinanceCosts.toLocaleString()}` },
+        { label: "Cash-Out Equity (Optional)", value: cashOutAmount > 0 ? `$${cashOutAmount.toLocaleString()}` : "$0" },
+      ],
+      results: [
+        { label: "Monthly Payment Savings", value: result.monthlySavings >= 0 ? `+$${Math.round(result.monthlySavings).toLocaleString()}/mo` : `-$${Math.abs(Math.round(result.monthlySavings)).toLocaleString()}/mo`, isHighlight: true },
+        { label: "Break-Even Period", value: result.breakEvenMonths ? `${result.breakEvenMonths} Months` : "N/A" },
+        { label: "Current Monthly P&I", value: `$${Math.round(result.currentMonthlyPAndI).toLocaleString()}/mo` },
+        { label: "New Monthly P&I", value: `$${Math.round(result.newMonthlyPAndI).toLocaleString()}/mo` },
+        { label: "Total Lifetime Net Savings", value: `$${Math.round(result.lifetimeSavings).toLocaleString()}` },
+        { label: "Total Interest Reduction", value: `$${Math.round(result.interestSavings).toLocaleString()}` },
+      ],
+    });
+  };
+
   return (
     <div className="bg-white rounded-2xl border border-border-subtle shadow-card overflow-hidden">
+      <div className="bg-ivory-warm px-6 py-4 border-b border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-brass inline-block" />
+          <span className="text-xs font-bold uppercase tracking-wider text-navy-midnight">
+            Refinance & Equity Optimization Tool
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="text-xs font-semibold text-slate-500 hover:text-navy-midnight hover:underline"
+          >
+            ↺ Reset
+          </button>
+          <button
+            type="button"
+            onClick={handleExportPDF}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-white border border-border-subtle hover:border-slate-300 text-xs font-bold text-navy-midnight shadow-sm"
+          >
+            <span>📄 Print / Export PDF</span>
+          </button>
+        </div>
+      </div>
+
       <div className="p-6 sm:p-8 lg:p-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Controls Column */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle">
+            <div className="p-5 rounded-xl bg-ivory-warm border border-border-subtle">
               <h4 className="text-xs font-bold uppercase tracking-wider text-navy-midnight mb-3">
                 Current Mortgage Terms
               </h4>
@@ -75,7 +136,7 @@ export function RefinanceCalculator() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-white border border-border-subtle shadow-sm">
+            <div className="p-5 rounded-xl bg-white border border-border-subtle shadow-sm space-y-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-navy-midnight mb-3">
                 Proposed New Mortgage Terms
               </h4>
@@ -127,14 +188,14 @@ export function RefinanceCalculator() {
           </div>
 
           {/* Results Summary Column */}
-          <div className="lg:col-span-5 bg-ivory-warm rounded-xl p-6 sm:p-7 border border-border-subtle flex flex-col justify-between">
+          <div className="lg:col-span-5 sticky top-24 bg-ivory-warm rounded-2xl p-6 sm:p-7 border border-border-subtle shadow-card flex flex-col justify-between">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Estimated Monthly Savings
               </span>
               <div className="mt-1 flex items-baseline gap-2">
                 <span
-                  className={`font-heading text-4xl sm:text-5xl font-extrabold ${
+                  className={`font-heading text-4xl sm:text-5xl font-black ${
                     result.monthlySavings >= 0 ? "text-emerald-700" : "text-amber-700"
                   }`}
                 >
@@ -142,34 +203,30 @@ export function RefinanceCalculator() {
                     ? `+$${Math.round(result.monthlySavings).toLocaleString()}`
                     : `-$${Math.abs(Math.round(result.monthlySavings)).toLocaleString()}`}
                 </span>
-                <span className="text-sm font-medium text-slate-500">/ month</span>
+                <span className="text-sm font-semibold text-slate-500">/ month</span>
               </div>
 
               <div className="mt-6 pt-6 border-t border-border-subtle space-y-3.5 text-sm">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center py-1 border-b border-border-subtle/60">
+                  <span className="text-slate-600">Break-Even Period:</span>
+                  <span className="font-black text-navy-midnight">
+                    {result.breakEvenMonths !== null ? `${result.breakEvenMonths} Months` : "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1 border-b border-border-subtle/60">
                   <span className="text-slate-600">Current Monthly P&I:</span>
                   <span className="font-semibold text-slate-700">
                     ${Math.round(result.currentMonthlyPAndI).toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center py-1 border-b border-border-subtle/60">
                   <span className="text-slate-600">New Monthly P&I:</span>
                   <span className="font-bold text-navy-midnight">
                     ${Math.round(result.newMonthlyPAndI).toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Break-Even Period:</span>
-                  <span className="font-bold text-navy-midnight">
-                    {result.breakEvenMonths !== null ? (
-                      `${result.breakEvenMonths} Months`
-                    ) : (
-                      <span className="text-slate-400">N/A (Higher Payment)</span>
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Lifetime Savings:</span>
+                <div className="flex justify-between items-center py-1 border-b border-border-subtle/60">
+                  <span className="text-slate-600">Lifetime Net Savings:</span>
                   <span
                     className={`font-bold ${
                       result.lifetimeSavings >= 0 ? "text-emerald-700" : "text-slate-700"
@@ -178,8 +235,8 @@ export function RefinanceCalculator() {
                     ${Math.round(result.lifetimeSavings).toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-600">Interest Saved:</span>
+                <div className="flex justify-between items-center py-1 border-b border-border-subtle/60">
+                  <span className="text-slate-600">Total Interest Saved:</span>
                   <span className="font-bold text-navy-midnight">
                     ${Math.round(result.interestSavings).toLocaleString()}
                   </span>
@@ -187,18 +244,15 @@ export function RefinanceCalculator() {
               </div>
             </div>
 
-            <div className="mt-8 space-y-3">
+            <div className="mt-8 space-y-2.5">
               <Button
                 href="/get-started?purpose=refinance"
                 variant="brass"
                 size="md"
-                className="w-full text-navy-midnight font-bold"
+                className="w-full text-navy-deep font-bold shadow-sm"
               >
-                Lock In Your Refinance Rate
+                Lock In Your Refinance Rate →
               </Button>
-              <p className="text-[11px] text-slate-500 text-center">
-                Refinancing may increase total finance charges over the full term if term is lengthened.
-              </p>
             </div>
           </div>
         </div>
