@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config/siteConfig";
 import { Button } from "../ui/Button";
+import { Logo } from "../ui/Logo";
 import { loanProducts } from "@/content/loans";
 
 export function Header() {
@@ -66,8 +67,8 @@ export function Header() {
       }`}
     >
       {/* Top Utility Announcement Bar */}
-      <div className="hidden lg:block bg-navy-deep/80 border-b border-navy-light/20 text-xs py-1.5 text-slate-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div className="hidden lg:block bg-navy-deep/90 border-b border-navy-light/20 text-xs py-2 text-slate-300">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5 text-slate-300">
               <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
@@ -95,25 +96,13 @@ export function Header() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="flex items-center justify-between h-20 flex-nowrap gap-4">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brass rounded-md py-1">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brass to-brass-dark flex items-center justify-center text-navy-deep font-black text-xl shadow-md group-hover:scale-105 transition-transform">
-              ✦
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading font-black text-xl text-white tracking-tight flex items-center gap-1">
-                {siteConfig.brand.name}
-              </span>
-              <span className="text-[10px] tracking-widest uppercase text-brass font-medium">
-                Premier US Mortgage
-              </span>
-            </div>
-          </Link>
+          <Logo size="md" />
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 flex-nowrap" aria-label="Main Navigation">
             {/* Loan Programs Mega Trigger */}
             <div
               className="relative"
@@ -302,7 +291,7 @@ export function Header() {
           onMouseLeave={() => setActiveMega(null)}
           className="hidden lg:block absolute top-full left-0 w-full bg-navy-midnight border-b border-navy-light/40 shadow-mega animate-fadeIn"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
             <div className="grid grid-cols-12 gap-8">
               {/* Category 1: Home Financing */}
               <div className="col-span-3 space-y-4 border-r border-navy-light/30 pr-6">
@@ -417,7 +406,7 @@ export function Header() {
           onMouseLeave={() => setActiveMega(null)}
           className="hidden lg:block absolute top-full left-0 w-full bg-navy-midnight border-b border-navy-light/40 shadow-mega animate-fadeIn"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
             <div className="grid grid-cols-12 gap-8">
               {/* Calculators List */}
               <div className="col-span-8 grid grid-cols-2 gap-5 pr-8 border-r border-navy-light/30">
@@ -561,7 +550,7 @@ export function Header() {
           onMouseLeave={() => setActiveMega(null)}
           className="hidden lg:block absolute top-full left-0 w-full bg-navy-midnight border-b border-navy-light/40 shadow-mega animate-fadeIn"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
             <div className="grid grid-cols-4 gap-6">
               <Link
                 href="/mortgage-rates"

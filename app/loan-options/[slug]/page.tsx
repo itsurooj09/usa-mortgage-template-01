@@ -159,14 +159,69 @@ export default function LoanDetailPage({
               </div>
             </div>
 
-            {/* Contextual Quick Quote Form */}
+            {/* Hero Visual Card Showcase (Replaces form) */}
             <div className="lg:col-span-5">
-              <ContextualLeadForm
-                defaultLoanPurpose={isRefi ? "refinance" : "buy"}
-                defaultLoanProgram={loan.title}
-                headline={`Check Your ${loan.title} Rate`}
-                subheadline="Get custom rates and eligibility guidelines from a licensed officer."
-              />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-brass/40 bg-navy-dark group">
+                <div className="relative h-80 sm:h-96 w-full overflow-hidden">
+                  <Image
+                    src={loanPhoto.url}
+                    alt={loanPhoto.alt}
+                    fill
+                    priority
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-midnight via-navy-midnight/40 to-transparent" />
+                </div>
+
+                {/* Floating Program Badges */}
+                <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+                  <span className="bg-navy-midnight/90 backdrop-blur-md text-brass font-bold text-xs px-3 py-1.5 rounded-full border border-brass/40 shadow-sm flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                    Direct Correspondent
+                  </span>
+                  <span className="bg-white/95 backdrop-blur-md text-navy-midnight font-bold text-xs px-3 py-1.5 rounded-full shadow-sm">
+                    {loan.metrics.minDownPayment}
+                  </span>
+                </div>
+
+                <div className="p-6 relative bg-navy-midnight/95 backdrop-blur-md border-t border-navy-light/40 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block">
+                        Closing Speed
+                      </span>
+                      <span className="text-2xl font-black text-brass font-heading">
+                        19 Days Avg.
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block">
+                        Credit Minimum
+                      </span>
+                      <span className="text-2xl font-black text-white font-heading">
+                        {loan.metrics.creditScoreGuideline}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                    <Button
+                      href={`/get-started?program=${loan.slug}`}
+                      variant="brass"
+                      size="md"
+                      className="w-full font-bold text-navy-deep justify-center shadow-md"
+                    >
+                      Check Eligibility Now →
+                    </Button>
+                    <a
+                      href={`tel:${siteConfig.contact.phone.replace(/[^0-9]/g, "")}`}
+                      className="inline-flex items-center justify-center text-xs font-semibold px-4 py-2.5 rounded-md border border-slate-500 text-slate-200 hover:text-white hover:border-slate-300 transition-colors text-center"
+                    >
+                      Call Specialist
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
@@ -180,15 +235,15 @@ export default function LoanDetailPage({
               <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
                 Program Overview
               </span>
-              <h2 className="font-heading font-bold text-3xl text-navy-midnight">
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl text-navy-midnight">
                 Understanding {loan.title}
               </h2>
-              <p className="text-base text-slate-700 leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-700 leading-relaxed">
                 {loan.detailedOverview}
               </p>
 
               {/* Program Real Estate Imagery Banner */}
-              <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden shadow-card border border-border-subtle my-4">
+              <div className="relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-card border border-border-subtle my-6">
                 <Image
                   src={loanPhoto.url}
                   alt={loanPhoto.alt}
@@ -196,22 +251,22 @@ export default function LoanDetailPage({
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-midnight/80 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-5 right-5 text-white">
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-brass">
-                    {loan.title} Representative Architecture
+                <div className="absolute bottom-5 left-6 right-6 text-white">
+                  <span className="text-xs uppercase tracking-wider font-bold text-brass">
+                    {loan.title} Architectural Standards
                   </span>
-                  <p className="text-sm font-medium drop-shadow mt-0.5">{loanPhoto.title}</p>
+                  <p className="text-base font-medium drop-shadow mt-1">{loanPhoto.title}</p>
                 </div>
               </div>
 
               {/* Key Benefits */}
               <div className="pt-6 border-t border-border-subtle">
-                <h3 className="font-heading font-bold text-xl text-navy-midnight mb-4">
+                <h3 className="font-heading font-bold text-xl sm:text-2xl text-navy-midnight mb-4">
                   Potential Program Benefits
                 </h3>
                 <ul className="space-y-3">
                   {loan.keyBenefits.map((benefit, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-700">
+                    <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-slate-700">
                       <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
                         ✓
                       </span>
@@ -225,13 +280,13 @@ export default function LoanDetailPage({
             {/* Target Audience & Eligibility Considerations */}
             <div className="lg:col-span-5 space-y-6">
               <div className="bg-ivory-warm rounded-2xl p-7 border border-border-subtle space-y-4">
-                <h3 className="font-heading font-bold text-lg text-navy-midnight">
+                <h3 className="font-heading font-bold text-xl text-navy-midnight">
                   Intended Borrower Audience
                 </h3>
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                <ul className="space-y-3 text-sm text-slate-600">
                   {loan.targetBorrower.map((tb, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-brass font-bold">•</span>
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <span className="text-brass font-bold text-lg leading-none">•</span>
                       <span>{tb}</span>
                     </li>
                   ))}
@@ -239,12 +294,12 @@ export default function LoanDetailPage({
               </div>
 
               <div className="bg-white rounded-2xl p-7 border border-border-subtle space-y-4 shadow-sm">
-                <h3 className="font-heading font-bold text-lg text-navy-midnight">
+                <h3 className="font-heading font-bold text-xl text-navy-midnight">
                   Eligibility Considerations
                 </h3>
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                <ul className="space-y-3 text-sm text-slate-600">
                   {loan.eligibilityFactors.map((ef, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
+                    <li key={idx} className="flex items-start gap-2.5">
                       <span className="text-slate-400 font-bold">―</span>
                       <span>{ef}</span>
                     </li>
@@ -252,25 +307,143 @@ export default function LoanDetailPage({
                 </ul>
               </div>
 
-              {/* Recommended Calculator Card */}
+              {/* Recommended Calculator Card (Link Only - No Embedded Full Form) */}
               <div className="bg-navy-midnight text-white rounded-2xl p-6 border border-navy-light/40 space-y-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-brass">
-                  Recommended Tool
+                <span className="text-xs font-bold uppercase tracking-wider text-brass">
+                  Financial Planning Tool
                 </span>
                 <h4 className="font-heading font-bold text-lg text-white">
                   {loan.recommendedCalculator.title}
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed">
                   {loan.recommendedCalculator.description}
                 </p>
                 <div className="pt-2">
                   <Link
                     href={loan.recommendedCalculator.href}
-                    className="text-xs font-bold text-brass hover:underline flex items-center gap-1"
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-brass hover:underline"
                   >
                     <span>Launch Calculator</span>
                     <span>→</span>
                   </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Comprehensive Underwriting Guidelines Matrix */}
+      <section className="py-20 bg-ivory-warm border-b border-border-subtle">
+        <Container>
+          <SectionHeading
+            align="center"
+            eyebrow="Underwriting Standards"
+            title={`${loan.title} Qualification Guidelines`}
+            subtitle="Transparent benchmarks evaluated by our direct underwriting desk during formal review."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div className="bg-white rounded-2xl p-7 border border-border-subtle shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg">
+                FICO
+              </div>
+              <h3 className="font-heading font-bold text-xl text-navy-midnight">Credit Profile</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Benchmark requirement: <strong>{loan.metrics.creditScoreGuideline}</strong> representative middle score. Discharged bankruptcies or foreclosures typically require 2 to 4 years of seasoning depending on mitigating circumstances.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-7 border border-border-subtle shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg">
+                DTI
+              </div>
+              <h3 className="font-heading font-bold text-xl text-navy-midnight">Debt-to-Income</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Maximum allowable back-end DTI generally caps at 43%–50% with Automated Underwriting System (AUS) approval. Compensating factors include substantial liquid reserves and low loan-to-value ratios.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-7 border border-border-subtle shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg">
+                $$$
+              </div>
+              <h3 className="font-heading font-bold text-xl text-navy-midnight">Down Payment & Reserves</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Entry threshold: <strong>{loan.metrics.minDownPayment}</strong>. Eligible funds may include verified personal savings, 401(k) asset loans, or 100% bona fide family gift contributions with formal gift letters.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Required Documentation Checklist */}
+      <section className="py-20 bg-white border-b border-border-subtle">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
+                Preparation Checklist
+              </span>
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl text-navy-midnight leading-tight">
+                Documents You Need for Fast Approval
+              </h2>
+              <p className="text-base text-slate-600 leading-relaxed">
+                Gathering these items before submitting your application ensures your loan package sails through initial underwriting without document condition delays.
+              </p>
+
+              <div className="space-y-4 pt-2">
+                <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-lg bg-navy-midnight text-brass flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    1
+                  </span>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-base">Income & Employment Verification</h4>
+                    <p className="text-sm text-slate-600 mt-0.5">
+                      Most recent 30 consecutive days of paystubs and past 2 years of W-2 forms. Self-employed borrowers provide 2 years of complete personal and business tax returns with all schedules.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-lg bg-navy-midnight text-brass flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    2
+                  </span>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-base">Asset & Down Payment Statements</h4>
+                    <p className="text-sm text-slate-600 mt-0.5">
+                      Last 60 days of consecutive statements for checking, savings, brokerage, and retirement accounts (all numbered pages including blank ones).
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-ivory-warm border border-border-subtle flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-lg bg-navy-midnight text-brass flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    3
+                  </span>
+                  <div>
+                    <h4 className="font-bold text-navy-midnight text-base">Identification & Property Details</h4>
+                    <p className="text-sm text-slate-600 mt-0.5">
+                      Clear government-issued photo ID (Driver&apos;s License or Passport) and fully executed purchase sales contract with all counteroffers and addenda.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 relative">
+              <div className="relative h-[440px] sm:h-[500px] rounded-2xl overflow-hidden shadow-card border border-border-subtle">
+                <Image
+                  src={photoLibrary.consultation.advisoryMeeting.url}
+                  alt="Loan officer reviewing documentation with clients"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -left-6 bg-navy-midnight text-white p-5 rounded-xl border border-navy-light/40 shadow-xl hidden sm:block max-w-[280px]">
+                <div className="text-xs uppercase tracking-wider text-brass font-bold">Paperless Portal</div>
+                <div className="text-sm text-slate-200 mt-1">
+                  Upload documents securely from your phone with instant automated receipt confirmation.
                 </div>
               </div>
             </div>
@@ -294,13 +467,13 @@ export default function LoanDetailPage({
                 key={step.stepNumber}
                 className="bg-white rounded-xl p-6 border border-border-subtle relative shadow-sm"
               >
-                <div className="font-heading font-black text-3xl text-brass/40 mb-3">
+                <div className="font-heading font-black text-3xl text-brass mb-3">
                   0{step.stepNumber}
                 </div>
                 <h4 className="font-heading font-bold text-lg text-navy-midnight mb-2">
                   {step.title}
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -309,8 +482,76 @@ export default function LoanDetailPage({
         </Container>
       </section>
 
+      {/* Real Estate Property Showcase */}
+      <section className="py-20 bg-white border-b border-border-subtle">
+        <Container>
+          <SectionHeading
+            align="center"
+            eyebrow="Architectural Suited Homes"
+            title={`Properties Commonly Financed via ${loan.title}`}
+            subtitle="Explore representative residential properties funded through our direct lending platform."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="group rounded-2xl overflow-hidden border border-border-subtle bg-white shadow-sm hover:shadow-card transition-all">
+              <div className="relative h-60 w-full overflow-hidden">
+                <Image
+                  src={photoLibrary.programs.conventional.url}
+                  alt="Suburban family residence"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">Single-Family Residence</span>
+                <h4 className="font-heading font-bold text-lg text-navy-midnight">Contemporary Craftsman</h4>
+                <p className="text-sm text-slate-600">
+                  Ideal for growing households seeking spacious backyards, neighborhood amenities, and top-tier school districts.
+                </p>
+              </div>
+            </div>
+
+            <div className="group rounded-2xl overflow-hidden border border-border-subtle bg-white shadow-sm hover:shadow-card transition-all">
+              <div className="relative h-60 w-full overflow-hidden">
+                <Image
+                  src={photoLibrary.hero.daytimeSuburban.url}
+                  alt="Modern architectural home"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">Master-Planned Neighborhood</span>
+                <h4 className="font-heading font-bold text-lg text-navy-midnight">Modern Suburb Estate</h4>
+                <p className="text-sm text-slate-600">
+                  Featuring energy-efficient smart building technology, open-concept floorplans, and community park access.
+                </p>
+              </div>
+            </div>
+
+            <div className="group rounded-2xl overflow-hidden border border-border-subtle bg-white shadow-sm hover:shadow-card transition-all">
+              <div className="relative h-60 w-full overflow-hidden">
+                <Image
+                  src={photoLibrary.programs.jumbo.url}
+                  alt="Luxury modern estate"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6 space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">High-Balance Luxury</span>
+                <h4 className="font-heading font-bold text-lg text-navy-midnight">Architectural Luxury Home</h4>
+                <p className="text-sm text-slate-600">
+                  Custom finishes, resort-style outdoor living spaces, and expansive acreage structured with precision financing.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* Product FAQs */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-ivory-warm">
         <Container size="narrow">
           <SectionHeading
             align="center"
@@ -328,7 +569,7 @@ export default function LoanDetailPage({
               href={`/get-started?program=${loan.slug}`}
               variant="brass"
               size="lg"
-              className="font-bold text-navy-deep"
+              className="font-bold text-navy-deep shadow-md"
             >
               Start Pre-Approval for {loan.title} →
             </Button>

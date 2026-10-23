@@ -50,7 +50,8 @@ const config: Config = {
         floating: "0 30px 60px -15px rgba(16, 36, 58, 0.25)",
       },
       maxWidth: {
-        container: "1320px",
+        container: "1600px",
+        wide: "1600px",
         form: "720px",
         "form-compact": "480px",
       },

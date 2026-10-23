@@ -8,10 +8,17 @@
   --font-serif: "DM Serif Display", serif;
 }
 
+html {
+  font-size: 17px;
+}
+
 body {
   color: #10243a;
   background-color: #ffffff;
   font-family: var(--font-inter), sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

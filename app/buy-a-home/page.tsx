@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { loanProducts } from "@/content/loans";
-import { ContextualLeadForm } from "@/components/forms/ContextualLeadForm";
+import { Accordion } from "@/components/ui/Accordion";
 import { photoLibrary } from "@/content/assets";
 
 export const metadata: Metadata = {
@@ -58,12 +58,63 @@ export default function BuyAHomePage() {
               </div>
             </div>
 
+            {/* Architectural Showcase Card (Replaces Form) */}
             <div className="lg:col-span-5">
-              <ContextualLeadForm
-                defaultLoanPurpose="buy"
-                headline="Check Home Buying Rates"
-                subheadline="Get tailored rates for your desired price point in seconds."
-              />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-brass/40 bg-navy-dark group">
+                <div className="relative h-80 sm:h-96 w-full overflow-hidden">
+                  <Image
+                    src={photoLibrary.hero.familyPorch.url}
+                    alt={photoLibrary.hero.familyPorch.alt}
+                    fill
+                    priority
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-midnight via-navy-midnight/40 to-transparent" />
+                </div>
+
+                {/* Floating Program Badges */}
+                <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+                  <span className="bg-navy-midnight/90 backdrop-blur-md text-brass font-bold text-xs px-3 py-1.5 rounded-full border border-brass/40 shadow-sm flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+                    Direct Correspondent
+                  </span>
+                  <span className="bg-white/95 backdrop-blur-md text-navy-midnight font-bold text-xs px-3 py-1.5 rounded-full shadow-sm">
+                    As Low as 3% Down
+                  </span>
+                </div>
+
+                <div className="p-6 relative bg-navy-midnight/95 backdrop-blur-md border-t border-navy-light/40 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block">
+                        Average Closing Time
+                      </span>
+                      <span className="text-2xl font-black text-brass font-heading">
+                        19 Days
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold block">
+                        Offer Contingency
+                      </span>
+                      <span className="text-2xl font-black text-white font-heading">
+                        Zero Delays
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                    <Button
+                      href="/get-started?purpose=buy"
+                      variant="brass"
+                      size="md"
+                      className="w-full font-bold text-navy-deep justify-center shadow-md"
+                    >
+                      Start Free Pre-Approval →
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
@@ -250,6 +301,130 @@ export default function BuyAHomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* The 6-Phase Homebuying Roadmap */}
+      <section className="py-20 bg-white border-t border-border-subtle">
+        <Container>
+          <SectionHeading
+            align="center"
+            eyebrow="Chronological Guide"
+            title="The 6-Phase Homebuyer Roadmap"
+            subtitle="Everything you need to navigate from your initial dream to signing on the dotted line."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                01
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Financial Health & Credit Polish</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Check your credit report for errors, pay down revolving credit balances below 30% utilization, and avoid opening new credit lines or financing automobiles before applying.
+              </p>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                02
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Digital Underwritten Pre-Approval</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Obtain a full pre-underwritten approval letter with verified income and assets—giving listing agents absolute confidence your offer is backed by real bank capital.
+              </p>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                03
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Targeted Property Search</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Partner with an experienced local real estate agent to tour open houses, analyze neighborhood comps, and determine realistic target offer price points.
+              </p>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                04
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Offer Submission & Contract</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Submit your purchase agreement with our loan officer calling the listing agent immediately to vouch for your qualification and eliminate financing anxieties.
+              </p>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                05
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Home Inspection & Appraisal</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Complete a comprehensive property inspection to check foundation, plumbing, and HVAC systems, while our desk dispatches an independent licensed appraiser.
+              </p>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-ivory-warm border border-border-subtle space-y-3">
+              <span className="w-10 h-10 rounded-xl bg-navy-midnight text-brass flex items-center justify-center font-bold text-lg font-heading">
+                06
+              </span>
+              <h4 className="font-heading font-bold text-xl text-navy-midnight">Clear-to-Close & Front Door Keys</h4>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Review your final Closing Disclosure, wire your down payment funds to escrow, sign closing documents, and take possession of your brand new home keys!
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Common Homebuying FAQs */}
+      <section className="py-20 bg-ivory-warm border-t border-border-subtle">
+        <Container size="narrow">
+          <SectionHeading
+            align="center"
+            eyebrow="Guidance"
+            title="Homebuying Frequently Asked Questions"
+            subtitle="Essential answers to guide your first or next residential real estate purchase."
+          />
+
+          <div className="mt-10">
+            <Accordion
+              items={[
+                {
+                  question: "How long is my Northstar pre-approval letter valid for?",
+                  answer:
+                    "Pre-approval letters are typically valid for 90 days. Because our letters are verified with underwritten income and asset data, refreshing your pre-approval after 90 days is fast and only requires providing your most recent pay stub and bank statement.",
+                },
+                {
+                  question: "Can I use gift funds from family for my down payment?",
+                  answer:
+                    "Yes! Conventional, FHA, and VA loan programs permit 100% of your required down payment and closing costs to be paid as a bona fide gift from immediate family members, provided a standard gift letter and donor transfer statement are documented.",
+                },
+                {
+                  question: "What is Private Mortgage Insurance (PMI) and when does it cancel?",
+                  answer:
+                    "PMI protects the lender when you put down less than 20% on a conventional loan. On conventional mortgages, PMI automatically cancels once your principal balance reaches 78% of your home's original purchase value, or you can request cancellation once you reach 80% through scheduled payments or home market appreciation.",
+                },
+                {
+                  question: "How much should I budget for closing costs in addition to my down payment?",
+                  answer:
+                    "Closing costs generally range between 2% and 4% of the total loan amount, covering appraisal fees, title insurance, county recording fees, and initial escrow reserves for property taxes and homeowner's insurance.",
+                },
+              ]}
+            />
+          </div>
+
+          <div className="mt-12 text-center">
+            <Button
+              href="/get-started?purpose=buy"
+              variant="brass"
+              size="lg"
+              className="font-bold text-navy-deep shadow-md"
+            >
+              Get Pre-Approved to Buy a Home →
+            </Button>
           </div>
         </Container>
       </section>

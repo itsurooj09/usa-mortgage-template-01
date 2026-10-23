@@ -29,18 +29,6 @@ export default function HomeAffordabilityPage() {
   return (
     <div className="py-12 bg-ivory-warm min-h-screen">
       <Container>
-        <div className="max-w-3xl mb-8">
-          <span className="text-xs font-bold uppercase tracking-wider text-brass-dark">
-            Interactive Calculator
-          </span>
-          <h1 className="font-heading font-black text-3xl sm:text-4xl text-navy-midnight mt-1">
-            Home Affordability Calculator
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 mt-2">
-            Discover how much home you can comfortably afford. We calculate your purchasing power across Conservative (28/36%), Moderate (31/43%), and Aggressive (36/48%) underwriting tiers.
-          </p>
-        </div>
-
         <HomeAffordabilityCalculator />
 
         <div className="mt-16 max-w-3xl mx-auto">
