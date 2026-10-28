@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mortgage Payment Calculator | Mortgage Level</title>
-  <meta name="description" content="Calculate your exact monthly principal and interest payment along with itemized estimates for real estate taxes, hazard insurance, and cancelable PMI." />
+  <title>Mortgage Calculator</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,14 +17,7 @@
       theme: {
         extend: {
           colors: {
-            'navy-midnight': '#0a1120',
-            'navy-deep': '#060b14',
-            'navy-light': '#1e293b',
             'navy-card': '#0c1527',
-            'brass': '#c5a46d',
-            'brass-light': '#dfcaa7',
-            'brass-hover': '#b5935c',
-            'ivory-warm': '#f8f9fa',
           },
           fontFamily: {
             heading: ['"Plus Jakarta Sans"', 'sans-serif'],
@@ -38,22 +30,35 @@
   </script>
 
   <style>
-    /* Custom Slider Accents */
+    body {
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 24px 16px;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    /* Custom Slider Styles matching exact screenshot */
     input[type=range] {
       -webkit-appearance: none;
       appearance: none;
       background: #e2e8f0;
       border-radius: 9999px;
+      outline: none;
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: #0d9488;
       border: 2px solid #ffffff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
       cursor: pointer;
       transition: transform 0.1s ease;
     }
@@ -61,15 +66,15 @@
       transform: scale(1.15);
     }
     input[type=range]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: #0d9488;
       border: 2px solid #ffffff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
       cursor: pointer;
     }
-    /* Hide spin buttons */
+    /* Hide input spin arrows */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -80,425 +85,290 @@
     }
   </style>
 </head>
-<body class="bg-ivory-warm font-sans text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-teal-500 selection:text-white">
+<body>
 
   <!-- =====================================================================
-       1. TOP UTILITY ANNOUNCEMENT BAR (Matches exact screenshot header)
+       STANDALONE CALCULATOR CARD (Exact match to uploaded screenshot)
        ===================================================================== -->
-  <div class="bg-navy-deep text-xs py-2.5 text-slate-300 border-b border-navy-light/40">
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center flex-wrap gap-2">
-      <div class="flex items-center gap-3">
-        <span class="flex items-center gap-1.5 text-slate-300">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-          Direct Lending Desk:
-          <a href="tel:8005550199" class="font-semibold text-white hover:text-brass transition-colors ml-1">(800) 555-0199</a>
-        </span>
-        <span class="text-slate-600">|</span>
-        <span class="text-slate-400">NMLS #1928471 • Equal Housing Lender</span>
+  <div class="w-full max-w-[1280px] bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl space-y-8">
+    
+    <!-- Top Header inside Card -->
+    <div class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200/80">
+        <div class="space-y-1.5 max-w-3xl">
+          <h2 id="tabHeadline" class="font-heading font-black text-2xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
+            What will this house actually cost each month?
+          </h2>
+          <p id="tabSubhead" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Adjust the numbers and watch the payment update. Nothing here is submitted anywhere and no credit check is involved.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-500 font-medium whitespace-nowrap self-start md:self-auto">
+          <span class="w-2 h-2 rounded-full bg-teal-500 inline-block animate-pulse"></span>
+          <span>Estimates only · not a rate quote</span>
+        </div>
       </div>
-      <div class="hidden sm:flex items-center gap-5 text-slate-300">
-        <a href="#quote" class="hover:text-brass transition-colors flex items-center gap-1.5">
-          <span>Instant Rate Quote</span>
-          <span class="text-[10px] bg-navy-light text-brass px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">NEW</span>
-        </a>
-        <a href="#branches" class="hover:text-white transition-colors">Branches &amp; Licenses</a>
-        <a href="#consultation" class="hover:text-white transition-colors">Schedule Consultation</a>
+
+      <!-- Tab Selector Pills -->
+      <div class="overflow-x-auto pb-2 pt-1 flex items-center gap-2 scrollbar-none" id="tabsList">
+        <button onclick="setTab('purchase')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-slate-900 text-white shadow-md font-bold" data-tab="purchase">Purchase</button>
+        <button onclick="setTab('afford')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="afford">Affordability</button>
+        <button onclick="setTab('refi')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="refi">Refinance</button>
+        <button onclick="setTab('rentbuy')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="rentbuy">Rent vs Buy</button>
+        <button onclick="setTab('vapurchase')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="vapurchase">VA Purchase</button>
+        <button onclick="setTab('varefi')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="varefi">VA Refinance</button>
+        <button onclick="setTab('dscr')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="dscr">Debt-Service (DSCR)</button>
+        <button onclick="setTab('flip')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="flip">Fix &amp; Flip</button>
       </div>
     </div>
+
+    <!-- Main 2-Column Split: Inputs (Left) & Results Rail (Right) -->
+    <div class="flex flex-col lg:flex-row items-start gap-8 xl:gap-10">
+
+      <!-- ==============================================================
+           LEFT COLUMN: NUMBERED SECTION CARDS (#1, #2, #3)
+           ============================================================== -->
+      <div class="w-full lg:flex-1 space-y-6" id="leftSections">
+
+        <!-- #1 The loan (4 fields) -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+              <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The loan</h3>
+            </div>
+            <span class="text-xs text-slate-400 font-medium">4 fields</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            
+            <!-- Home price -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Home price</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                <input type="number" id="homePrice" value="400000" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHomePrice(this.value)" />
+              </div>
+              <input type="range" id="homePriceSlider" min="50000" max="2000000" step="10000" value="400000" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHomePrice(this.value)" />
+            </div>
+
+            <!-- Down payment (20%) -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block" id="dpLabel">Down payment (20%)</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                <input type="number" id="downPayment" value="80000" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncDownPayment(this.value)" />
+              </div>
+              <input type="range" id="downPaymentSlider" min="0" max="400000" step="5000" value="80000" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncDownPayment(this.value)" />
+            </div>
+
+            <!-- Interest rate -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <input type="number" id="interestRate" value="6.5" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncInterestRate(this.value)" />
+                <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+              </div>
+              <input type="range" id="interestRateSlider" min="2" max="12" step="0.125" value="6.5" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncInterestRate(this.value)" />
+            </div>
+
+            <!-- Loan term -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Loan term</label>
+              <div class="grid grid-cols-3 gap-2 h-12">
+                <button type="button" onclick="setTerm(30)" id="term30" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-teal-600 text-white border-teal-600">30 yrs</button>
+                <button type="button" onclick="setTerm(20)" id="term20" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-white text-slate-700 border-slate-200 hover:bg-slate-50">20 yrs</button>
+                <button type="button" onclick="setTerm(15)" id="term15" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-white text-slate-700 border-slate-200 hover:bg-slate-50">15 yrs</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- #2 Taxes, insurance & dues (4 fields) -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+              <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Taxes, insurance &amp; dues</h3>
+            </div>
+            <span class="text-xs text-slate-400 font-medium">4 fields</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            
+            <!-- Property tax rate -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Property tax rate</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <input type="number" id="taxRate" value="1.1" min="0.2" max="3.5" step="0.05" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncTaxRate(this.value)" />
+                <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+              </div>
+              <input type="range" id="taxRateSlider" min="0.2" max="3.5" step="0.05" value="1.1" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncTaxRate(this.value)" />
+              <p class="text-xs text-slate-500 leading-normal">Annual, as a percentage of home price. US average is ~1.1%.</p>
+            </div>
+
+            <!-- Home insurance -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Home insurance</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                <input type="number" id="homeIns" value="1800" min="300" max="10000" step="100" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHomeIns(this.value)" />
+                <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per year</span>
+              </div>
+              <input type="range" id="homeInsSlider" min="300" max="10000" step="100" value="1800" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHomeIns(this.value)" />
+            </div>
+
+            <!-- Mortgage insurance (PMI) -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">Mortgage insurance (PMI)</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <input type="number" id="pmiRate" value="0.55" min="0.1" max="2.0" step="0.05" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncPmiRate(this.value)" />
+                <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+              </div>
+              <input type="range" id="pmiRateSlider" min="0.1" max="2.0" step="0.05" value="0.55" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncPmiRate(this.value)" />
+              <p class="text-xs text-slate-500 leading-normal">Charged when LTV is above 80%. Drops off automatically once below 80%.</p>
+            </div>
+
+            <!-- HOA dues -->
+            <div class="space-y-1.5">
+              <label class="text-sm font-medium text-slate-800 block">HOA dues</label>
+              <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                <input type="number" id="hoaDues" value="0" min="0" max="2000" step="25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHoaDues(this.value)" />
+                <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per month</span>
+              </div>
+              <input type="range" id="hoaDuesSlider" min="0" max="2000" step="25" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHoaDues(this.value)" />
+            </div>
+
+          </div>
+        </section>
+
+        <!-- #3 Paying it off faster (1 field) -->
+        <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="text-slate-400 font-mono text-xs font-semibold">#3</span>
+              <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Paying it off faster</h3>
+            </div>
+            <span class="text-xs text-slate-400 font-medium">1 field</span>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-sm font-medium text-slate-800 block">Extra toward principal</label>
+            <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+              <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+              <input type="number" id="extraPay" value="0" min="0" max="2500" step="25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncExtraPay(this.value)" />
+              <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per month</span>
+            </div>
+            <input type="range" id="extraPaySlider" min="0" max="2500" step="25" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncExtraPay(this.value)" />
+            <p class="text-xs text-slate-500 leading-normal">Every extra dollar goes straight to the principal balance, saving interest over the life of the loan.</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ==============================================================
+           RIGHT COLUMN: STICKY RESULTS RAIL (Exact match to screenshot)
+           ============================================================== -->
+      <aside class="w-full lg:w-[380px] xl:w-[420px] flex-shrink-0 space-y-6 lg:sticky lg:top-8">
+
+        <!-- 1. Dark Monthly Payment Display Card -->
+        <div class="bg-[#0c1527] text-white rounded-2xl p-6 shadow-xl space-y-2 border border-slate-800">
+          <div class="text-xs font-semibold uppercase tracking-wider text-slate-400" id="railLabel">
+            ESTIMATED MONTHLY PAYMENT
+          </div>
+          <div class="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight py-1" id="railBigNumber">
+            $2,539.28
+          </div>
+          <div class="text-xs text-slate-400 leading-relaxed" id="railSubtext">
+            Principal, interest, taxes, insurance, and fees.
+          </div>
+          
+          <!-- Segmented Progress Bar (Blue, Amber, Green) -->
+          <div class="pt-3">
+            <div class="h-2 rounded-full overflow-hidden flex w-full bg-slate-800" id="railBar">
+              <div class="bg-[#2563eb] h-full" id="barPartPi" style="width: 79.6%;" title="Principal & Interest"></div>
+              <div class="bg-[#d97706] h-full" id="barPartTax" style="width: 14.5%;" title="Property Taxes"></div>
+              <div class="bg-[#059669] h-full" id="barPartIns" style="width: 5.9%;" title="Homeowner Insurance"></div>
+              <div class="bg-[#8b5cf6] h-full" id="barPartPmi" style="width: 0%;" title="PMI"></div>
+              <div class="bg-[#ec4899] h-full" id="barPartHoa" style="width: 0%;" title="HOA Dues"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Breakdown Rows Table Card -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-1" id="breakdownRows">
+          
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Loan amount</span>
+            <span class="font-mono font-bold text-slate-900" id="rowLoanAmt">$320,000</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Down payment</span>
+            <span class="font-mono font-bold text-slate-900" id="rowDownPay">$80,000 (20%)</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Principal &amp; interest</span>
+            <span class="font-mono font-bold text-slate-900" id="rowPI">$2,022.62</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Property taxes</span>
+            <span class="font-mono font-bold text-slate-900" id="rowTaxes">$366.67/mo</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Home insurance</span>
+            <span class="font-mono font-bold text-slate-900" id="rowIns">$150.00/mo</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm hidden" id="rowPmiWrap">
+            <span class="text-slate-600 font-medium">Mortgage insurance (PMI)</span>
+            <span class="font-mono font-bold text-slate-900" id="rowPmi">$0/mo</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm hidden" id="rowHoaWrap">
+            <span class="text-slate-600 font-medium">HOA dues</span>
+            <span class="font-mono font-bold text-slate-900" id="rowHoa">$0/mo</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
+            <span class="text-slate-700">Total monthly payment</span>
+            <span class="font-mono font-bold text-slate-900 text-base" id="rowTotalPayment">$2,539.28</span>
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-0 text-sm">
+            <span class="text-slate-600 font-medium">Total lifetime interest</span>
+            <span class="font-mono font-bold text-slate-900" id="rowTotalInterest">$408,142.36</span>
+          </div>
+
+        </div>
+
+        <!-- 3. Pre-Approval CTA Button -->
+        <div class="pt-1">
+          <a href="#apply" class="w-full flex items-center justify-center py-4 px-6 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg">
+            Get Pre-Approved for this Scenario &rarr;
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- Bottom Disclaimer (Matching exact screenshot footer text) -->
+    <p class="text-[11px] text-slate-400 leading-relaxed pt-4 border-t border-slate-100">
+      Figures are estimates for illustration only and are not a loan offer, or commitment to lend, or a rate lock. Actual terms depend on credit approval, property details and market conditions.
+    </p>
+
   </div>
 
   <!-- =====================================================================
-       2. MAIN NAVIGATION HEADER (Matches exact screenshot navbar)
-       ===================================================================== -->
-  <header class="sticky top-0 z-50 w-full bg-navy-midnight border-b border-navy-light/40 shadow-lg">
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-      <div class="flex items-center justify-between h-20 gap-4">
-        
-        <!-- Brand Logo: MORTGAGE LEVEL -->
-        <a href="#" class="inline-flex items-center gap-3 group focus:outline-none">
-          <div class="relative flex-shrink-0 flex items-center justify-center">
-            <svg width="38" height="38" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="2" width="36" height="36" rx="9" fill="#172F4D" stroke="#234165" stroke-width="1.5" />
-              <!-- Compass Star Needle -->
-              <path d="M20 7L23 18.5H17L20 7Z" fill="#F5EFE4" />
-              <path d="M20 33L17 21.5H23L20 33Z" fill="#C5A46D" />
-              <path d="M33 20L21.5 23V17L33 20Z" fill="#F5EFE4" />
-              <path d="M7 20L18.5 17V23L7 20Z" fill="#C5A46D" />
-              <!-- Diamond Core -->
-              <rect x="17" y="17" width="6" height="6" transform="rotate(45 20 20)" fill="#FFFFFF" />
-              <circle cx="20" cy="20" r="1.5" fill="#10243A" />
-            </svg>
-          </div>
-          <div class="flex flex-col leading-none select-none">
-            <span class="font-heading font-black tracking-tight text-xl text-white">MORTGAGE</span>
-            <span class="font-heading font-bold uppercase tracking-[0.26em] text-[10px] text-brass mt-0.5">LEVEL</span>
-          </div>
-        </a>
-
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
-          <button class="flex items-center gap-1 px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">
-            <span>Loan Programs</span>
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </button>
-          
-          <button class="flex items-center gap-1 px-3.5 py-2 rounded-md text-sm font-semibold text-brass bg-navy-light/40 transition-colors">
-            <span>Calculators</span>
-            <svg class="w-4 h-4 text-brass" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </button>
-
-          <a href="#buy" class="px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">Buy a Home</a>
-          <a href="#refi" class="px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">Refinance</a>
-          
-          <button class="flex items-center gap-1 px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">
-            <span>Resources</span>
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </button>
-
-          <a href="#about" class="px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">About</a>
-          <a href="#contact" class="px-3.5 py-2 rounded-md text-sm font-semibold text-slate-200 hover:text-white hover:bg-navy-light/40 transition-colors">Contact</a>
-        </nav>
-
-        <!-- Right Action CTAs -->
-        <div class="flex items-center gap-3">
-          <a href="#apply" class="hidden sm:inline-flex items-center justify-center font-bold text-sm px-5 py-2.5 rounded-lg border border-slate-500/60 text-white hover:bg-white/10 hover:border-white transition-all shadow-sm">
-            Apply Now
-          </a>
-          <a href="#quote" class="inline-flex items-center justify-center font-bold text-sm px-5 py-2.5 rounded-lg bg-brass text-navy-midnight hover:bg-brass-hover transition-all shadow-md">
-            Get a Quote
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </header>
-
-  <!-- =====================================================================
-       3. TOP HERO BANNER (Matches screenshot hero text & badge)
-       ===================================================================== -->
-  <section class="bg-navy-midnight text-white py-12 lg:py-16 border-b border-navy-light/40">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass/15 text-brass text-xs font-bold uppercase tracking-wider border border-brass/30">
-          <span>Financial Decision Tool</span>
-          <span class="text-slate-500">•</span>
-          <span>Complete PITI &amp; Amortization Schedules</span>
-        </div>
-        <h1 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
-          Mortgage Payment Calculator
-        </h1>
-        <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
-          Calculate your exact monthly principal and interest payment along with itemized estimates for real estate taxes, hazard insurance, and cancelable PMI.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       4. MAIN CALCULATOR CARD CONTAINER (Matches screenshot card & tabs)
-       ===================================================================== -->
-  <main class="py-10 sm:py-14 flex-grow">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Big White Card (rounded-3xl border border-slate-200/90 shadow-xl) -->
-      <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl space-y-8">
-        
-        <!-- Header inside Card -->
-        <div class="space-y-4">
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200/80">
-            <div class="space-y-1.5 max-w-3xl">
-              <h2 id="tabHeadline" class="font-heading font-black text-2xl sm:text-4xl text-slate-900 tracking-tight leading-tight">
-                What will this house actually cost each month?
-              </h2>
-              <p id="tabSubhead" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Adjust the numbers and watch the payment update. Nothing here is submitted anywhere and no credit check is involved.
-              </p>
-            </div>
-            <div class="flex items-center gap-2 text-xs text-slate-500 font-medium whitespace-nowrap self-start md:self-auto">
-              <span class="w-2 h-2 rounded-full bg-teal-500 inline-block animate-pulse"></span>
-              <span>Estimates only · not a rate quote</span>
-            </div>
-          </div>
-
-          <!-- All 8 Tab Selector Pills -->
-          <div class="overflow-x-auto pb-2 pt-1 flex items-center gap-2 scrollbar-none" id="tabsList">
-            <button onclick="setTab('purchase')" class="tab-btn active px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-slate-900 text-white shadow-md font-bold" data-tab="purchase">Purchase</button>
-            <button onclick="setTab('afford')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="afford">Affordability</button>
-            <button onclick="setTab('refi')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="refi">Refinance</button>
-            <button onclick="setTab('rentbuy')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="rentbuy">Rent vs Buy</button>
-            <button onclick="setTab('vapurchase')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="vapurchase">VA Purchase</button>
-            <button onclick="setTab('varefi')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="varefi">VA Refinance</button>
-            <button onclick="setTab('dscr')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="dscr">Debt-Service (DSCR)</button>
-            <button onclick="setTab('flip')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="flip">Fix &amp; Flip</button>
-          </div>
-        </div>
-
-        <!-- Main 2-Column Split: Inputs (Left) & Results Rail (Right) -->
-        <div class="flex flex-col lg:flex-row items-start gap-8 xl:gap-10">
-
-          <!-- ==============================================================
-               LEFT COLUMN: NUMBERED SECTION CARDS (#01, #02, #03)
-               ============================================================== -->
-          <div class="w-full lg:flex-1 space-y-6" id="leftSections">
-
-            <!-- #01 The loan (4 fields) -->
-            <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div class="flex items-center gap-2.5">
-                  <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
-                  <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The loan</h3>
-                </div>
-                <span class="text-xs text-slate-400 font-medium">4 fields</span>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                
-                <!-- Home price -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Home price</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                    <input type="number" id="homePrice" value="400000" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHomePrice(this.value)" />
-                  </div>
-                  <input type="range" id="homePriceSlider" min="50000" max="2000000" step="10000" value="400000" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHomePrice(this.value)" />
-                </div>
-
-                <!-- Down payment (20%) -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block" id="dpLabel">Down payment (20%)</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                    <input type="number" id="downPayment" value="80000" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncDownPayment(this.value)" />
-                  </div>
-                  <input type="range" id="downPaymentSlider" min="0" max="400000" step="5000" value="80000" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncDownPayment(this.value)" />
-                </div>
-
-                <!-- Interest rate -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <input type="number" id="interestRate" value="6.5" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncInterestRate(this.value)" />
-                    <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
-                  </div>
-                  <input type="range" id="interestRateSlider" min="2" max="12" step="0.125" value="6.5" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncInterestRate(this.value)" />
-                </div>
-
-                <!-- Loan term -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Loan term</label>
-                  <div class="grid grid-cols-3 gap-2 h-12">
-                    <button type="button" onclick="setTerm(30)" id="term30" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-teal-600 text-white border-teal-600">30 yrs</button>
-                    <button type="button" onclick="setTerm(20)" id="term20" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-white text-slate-700 border-slate-200 hover:bg-slate-50">20 yrs</button>
-                    <button type="button" onclick="setTerm(15)" id="term15" class="term-btn rounded-xl font-bold text-xs sm:text-sm border transition-colors bg-white text-slate-700 border-slate-200 hover:bg-slate-50">15 yrs</button>
-                  </div>
-                </div>
-
-              </div>
-            </section>
-
-            <!-- #02 Taxes, insurance & dues (4 fields) -->
-            <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div class="flex items-center gap-2.5">
-                  <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
-                  <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Taxes, insurance &amp; dues</h3>
-                </div>
-                <span class="text-xs text-slate-400 font-medium">4 fields</span>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                
-                <!-- Property tax rate -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Property tax rate</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <input type="number" id="taxRate" value="1.1" min="0.2" max="3.5" step="0.05" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncTaxRate(this.value)" />
-                    <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
-                  </div>
-                  <input type="range" id="taxRateSlider" min="0.2" max="3.5" step="0.05" value="1.1" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncTaxRate(this.value)" />
-                  <p class="text-xs text-slate-500 leading-normal">Annual, as a percentage of home price. US average is ~1.1%.</p>
-                </div>
-
-                <!-- Home insurance -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Home insurance</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                    <input type="number" id="homeIns" value="1800" min="300" max="10000" step="100" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHomeIns(this.value)" />
-                    <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per year</span>
-                  </div>
-                  <input type="range" id="homeInsSlider" min="300" max="10000" step="100" value="1800" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHomeIns(this.value)" />
-                </div>
-
-                <!-- Mortgage insurance (PMI) -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">Mortgage insurance (PMI)</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <input type="number" id="pmiRate" value="0.55" min="0.1" max="2.0" step="0.05" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncPmiRate(this.value)" />
-                    <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
-                  </div>
-                  <input type="range" id="pmiRateSlider" min="0.1" max="2.0" step="0.05" value="0.55" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncPmiRate(this.value)" />
-                  <p class="text-xs text-slate-500 leading-normal">Charged when LTV is above 80%. Drops off automatically once below 80%.</p>
-                </div>
-
-                <!-- HOA dues -->
-                <div class="space-y-1.5">
-                  <label class="text-sm font-medium text-slate-800 block">HOA dues</label>
-                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                    <input type="number" id="hoaDues" value="" placeholder="0" min="0" max="2000" step="25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncHoaDues(this.value)" />
-                    <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per month</span>
-                  </div>
-                  <input type="range" id="hoaDuesSlider" min="0" max="2000" step="25" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncHoaDues(this.value)" />
-                </div>
-
-              </div>
-            </section>
-
-            <!-- #03 Paying it off faster (1 field) -->
-            <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
-              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div class="flex items-center gap-2.5">
-                  <span class="text-slate-400 font-mono text-xs font-semibold">#3</span>
-                  <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Paying it off faster</h3>
-                </div>
-                <span class="text-xs text-slate-400 font-medium">1 field</span>
-              </div>
-
-              <div class="space-y-1.5">
-                <label class="text-sm font-medium text-slate-800 block">Extra toward principal</label>
-                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                  <input type="number" id="extraPay" value="" placeholder="0" min="0" max="2500" step="25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="syncExtraPay(this.value)" />
-                  <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per month</span>
-                </div>
-                <input type="range" id="extraPaySlider" min="0" max="2500" step="25" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="syncExtraPay(this.value)" />
-                <p class="text-xs text-slate-500 leading-normal">Every extra dollar goes straight to the principal balance, saving interest over the life of the loan.</p>
-              </div>
-            </section>
-
-          </div>
-
-          <!-- ==============================================================
-               RIGHT COLUMN: RESULTS RAIL & STICKY BREAKDOWN CARD
-               ============================================================== -->
-          <aside class="w-full lg:w-[380px] xl:w-[420px] flex-shrink-0 space-y-6 lg:sticky lg:top-28">
-
-            <!-- 1. Dark Monthly Payment Display Card -->
-            <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl space-y-2 border border-slate-800">
-              <div class="text-xs font-semibold uppercase tracking-wider text-slate-400" id="railLabel">
-                Estimated monthly payment
-              </div>
-              <div class="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight py-1" id="railBigNumber">
-                $2,539.29
-              </div>
-              <div class="text-xs text-slate-400 leading-relaxed" id="railSubtext">
-                Principal, interest, taxes, insurance, and fees.
-              </div>
-              
-              <!-- Stacked Progress Bar -->
-              <div class="pt-3">
-                <div class="h-2 rounded-full overflow-hidden flex w-full bg-slate-800" id="railBar">
-                  <div class="bg-[#3b82f6] h-full" id="barPartPi" style="width: 79.6%;" title="Principal & Interest"></div>
-                  <div class="bg-[#d97706] h-full" id="barPartTax" style="width: 14.4%;" title="Property Taxes"></div>
-                  <div class="bg-[#10b981] h-full" id="barPartIns" style="width: 5.9%;" title="Homeowner Insurance"></div>
-                  <div class="bg-[#8b5cf6] h-full" id="barPartPmi" style="width: 0%;" title="PMI"></div>
-                  <div class="bg-[#ec4899] h-full" id="barPartHoa" style="width: 0%;" title="HOA Dues"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Breakdown Rows Table Card -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-1" id="breakdownRows">
-              
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-                <span class="text-slate-600 font-medium">Loan amount</span>
-                <span class="font-mono font-bold text-slate-900" id="rowLoanAmt">$320,000</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-                <span class="text-slate-600 font-medium">Down payment</span>
-                <span class="font-mono font-bold text-slate-900" id="rowDownPay">$80,000 (20%)</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-                <span class="text-slate-600 font-medium">Principal &amp; interest</span>
-                <span class="font-mono font-bold text-slate-900" id="rowPI">$2,022.62</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-                <span class="text-slate-600 font-medium">Property taxes</span>
-                <span class="font-mono font-bold text-slate-900" id="rowTaxes">$366.67/mo</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-                <span class="text-slate-600 font-medium">Home insurance</span>
-                <span class="font-mono font-bold text-slate-900" id="rowIns">$150/mo</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm hidden" id="rowPmiWrap">
-                <span class="text-slate-600 font-medium">Mortgage insurance (PMI)</span>
-                <span class="font-mono font-bold text-slate-900" id="rowPmi">$0/mo</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm hidden" id="rowHoaWrap">
-                <span class="text-slate-600 font-medium">HOA dues</span>
-                <span class="font-mono font-bold text-slate-900" id="rowHoa">$0/mo</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
-                <span class="text-slate-700">Total monthly payment</span>
-                <span class="font-mono font-bold text-slate-900 text-base" id="rowTotalPayment">$2,539.29</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 border-0 text-sm">
-                <span class="text-slate-600 font-medium">Total lifetime interest</span>
-                <span class="font-mono font-bold text-slate-900" id="rowTotalInterest">$408,142.26</span>
-              </div>
-
-            </div>
-
-            <!-- 3. Pre-Approval CTA Button -->
-            <div class="pt-1">
-              <a href="#apply" class="w-full flex items-center justify-center py-4 px-6 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg">
-                Get Pre-Approved for this Scenario &rarr;
-              </a>
-            </div>
-
-          </aside>
-
-        </div>
-
-        <!-- Bottom Disclaimer -->
-        <p class="text-[11px] text-slate-400 leading-relaxed pt-4 border-t border-slate-100">
-          Figures are estimates for illustration only and are not a loan offer, or commitment to lend, or a rate lock. Actual terms depend on credit approval, property details and market conditions.
-        </p>
-
-      </div>
-
-    </div>
-  </main>
-
-  <!-- =====================================================================
-       5. FOOTER
-       ===================================================================== -->
-  <footer class="bg-navy-midnight text-slate-400 text-xs py-8 border-t border-navy-light/40">
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-white uppercase tracking-wider">MORTGAGE LEVEL</span>
-        <span>&copy; 2026 Equal Housing Lender • NMLS #1928471</span>
-      </div>
-      <div>
-        Direct Lending Desk: (800) 555-0199 | Licensed in 50 US States
-      </div>
-    </div>
-  </footer>
-
-  <!-- =====================================================================
-       6. EXACT FINANCIAL CALCULATION JAVASCRIPT ENGINE (Vonk VCS Math)
+       FINANCIAL CALCULATION ENGINE
        ===================================================================== -->
   <script>
-    // State Store
     const state = {
       tab: 'purchase',
       homePrice: 400000,
@@ -512,7 +382,6 @@
       extraPay: 0,
     };
 
-    // Helper: Standard Financial PMT
     function pmt(rate, years, principal) {
       if (principal <= 0) return 0;
       if (rate <= 0) return principal / (years * 12);
@@ -521,7 +390,6 @@
       return (principal * r) / (1 - Math.pow(1 + r, -nper));
     }
 
-    // Helper: Amortize
     function amortize(principal, rate, years, extra = 0) {
       const r = rate / 100 / 12;
       const scheduled = pmt(rate, years, principal);
@@ -541,7 +409,6 @@
       return { totalInterest, months };
     }
 
-    // Helper: Formatters
     function fmt(val) {
       return '$' + Math.round(val).toLocaleString();
     }
@@ -549,7 +416,6 @@
       return '$' + (Math.round(val * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    // Tab Data
     const tabHeaders = {
       purchase: {
         headline: "What will this house actually cost each month?",
@@ -603,7 +469,6 @@
       recalculate();
     }
 
-    // Input Synchronization
     function syncHomePrice(val) {
       const v = Math.max(0, parseFloat(val) || 0);
       state.homePrice = v;
@@ -669,7 +534,7 @@
     function syncHoaDues(val) {
       const v = Math.max(0, parseFloat(val) || 0);
       state.hoaDues = v;
-      document.getElementById('hoaDues').value = v === 0 ? '' : v;
+      document.getElementById('hoaDues').value = v;
       document.getElementById('hoaDuesSlider').value = v;
       recalculate();
     }
@@ -677,46 +542,32 @@
     function syncExtraPay(val) {
       const v = Math.max(0, parseFloat(val) || 0);
       state.extraPay = v;
-      document.getElementById('extraPay').value = v === 0 ? '' : v;
+      document.getElementById('extraPay').value = v;
       document.getElementById('extraPaySlider').value = v;
       recalculate();
     }
 
-    // Master Calculation Function
     function recalculate() {
       const homeVal = state.homePrice;
       const downPay = Math.min(homeVal, state.downPayment);
       const loanAmt = Math.max(0, homeVal - downPay);
       const downPct = homeVal > 0 ? (downPay / homeVal) * 100 : 0;
       
-      // Update Down Payment Label
       document.getElementById('dpLabel').textContent = `Down payment (${Math.round(downPct)}%)`;
 
-      // 1. Principal & Interest
       const principalInterest = pmt(state.interestRate, state.term, loanAmt);
-      
-      // 2. Taxes (Annual tax / 12)
       const monthlyTax = (homeVal * (state.taxRate / 100)) / 12;
-
-      // 3. Hazard Insurance (Annual / 12)
       const monthlyIns = state.homeIns / 12;
 
-      // 4. PMI (If LTV > 80%)
       let monthlyPmi = 0;
-      if (downPct < 80 && downPct < 20 && loanAmt > 0) {
+      if (downPct < 20 && loanAmt > 0) {
         monthlyPmi = (loanAmt * (state.pmiRate / 100)) / 12;
       }
 
-      // 5. HOA
       const monthlyHoa = state.hoaDues;
-
-      // Total Monthly PITI
       const totalPayment = principalInterest + monthlyTax + monthlyIns + monthlyPmi + monthlyHoa;
-
-      // Amortization Schedule
       const sched = amortize(loanAmt, state.interestRate, state.term, state.extraPay);
 
-      // DOM Updates
       document.getElementById('railBigNumber').textContent = fmtCents(totalPayment);
       document.getElementById('rowLoanAmt').textContent = fmt(loanAmt);
       document.getElementById('rowDownPay').textContent = `${fmt(downPay)} (${Math.round(downPct)}%)`;
@@ -726,7 +577,6 @@
       document.getElementById('rowTotalPayment').textContent = fmtCents(totalPayment);
       document.getElementById('rowTotalInterest').textContent = fmtCents(sched.totalInterest);
 
-      // PMI & HOA row visibility
       const pmiWrap = document.getElementById('rowPmiWrap');
       if (monthlyPmi > 0) {
         pmiWrap.classList.remove('hidden');
@@ -743,7 +593,6 @@
         hoaWrap.classList.add('hidden');
       }
 
-      // Progress Bar width breakdown
       if (totalPayment > 0) {
         const pctPI = (principalInterest / totalPayment) * 100;
         const pctTax = (monthlyTax / totalPayment) * 100;
@@ -759,7 +608,6 @@
       }
     }
 
-    // Initialize on load
     document.addEventListener('DOMContentLoaded', () => {
       recalculate();
     });
