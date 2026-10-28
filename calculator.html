@@ -42,7 +42,7 @@
       min-height: 100vh;
     }
 
-    /* Custom Slider Styles matching exact screenshot */
+    /* Range Slider Styling */
     input[type=range] {
       -webkit-appearance: none;
       appearance: none;
@@ -74,7 +74,8 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.25);
       cursor: pointer;
     }
-    /* Hide input spin arrows */
+
+    /* Hide number input spinners */
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -88,7 +89,7 @@
 <body>
 
   <!-- =====================================================================
-       STANDALONE CALCULATOR CARD (Exact match to screenshot + Download Estimate)
+       STANDALONE CALCULATOR CARD (All 8 Tabs Fully Implemented)
        ===================================================================== -->
   <div class="w-full max-w-[1280px] bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl space-y-8">
     
@@ -109,7 +110,7 @@
         </div>
       </div>
 
-      <!-- Tab Selector Pills -->
+      <!-- Tab Selector Pills (All 8 Tabs) -->
       <div class="overflow-x-auto pb-2 pt-1 flex items-center gap-2 scrollbar-none" id="tabsList">
         <button onclick="setTab('purchase')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-slate-900 text-white shadow-md font-bold" data-tab="purchase">Purchase</button>
         <button onclick="setTab('afford')" class="tab-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer bg-white text-slate-700 border border-slate-200/90 hover:border-slate-400 hover:text-slate-900 shadow-2xs" data-tab="afford">Affordability</button>
@@ -126,10 +127,10 @@
     <div class="flex flex-col lg:flex-row items-start gap-8 xl:gap-10">
 
       <!-- ==============================================================
-           LEFT COLUMN: DYNAMIC NUMBERED SECTION CARDS
+           LEFT COLUMN: COMPLETE SECTION CARDS (RENDERED PER TAB)
            ============================================================== -->
       <div class="w-full lg:flex-1 space-y-6" id="leftSections">
-        <!-- Injected dynamically via JS based on selected tab -->
+        <!-- Injected via JavaScript with full fields for every tab -->
       </div>
 
       <!-- ==============================================================
@@ -149,7 +150,7 @@
             Principal, interest, taxes, insurance, and fees.
           </div>
           
-          <!-- Segmented Progress Bar -->
+          <!-- Segmented Progress Bar (Only visible when applicable) -->
           <div class="pt-3" id="barWrap">
             <div class="h-2 rounded-full overflow-hidden flex w-full bg-slate-800" id="railBar">
               <div class="bg-[#2563eb] h-full" id="barPartPi" style="width: 79.6%;" title="Principal & Interest"></div>
@@ -163,7 +164,7 @@
 
         <!-- 2. Breakdown Rows Table Card -->
         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-1" id="breakdownRows">
-          <!-- Dynamic breakdown rows injected here -->
+          <!-- Dynamically populated breakdown -->
         </div>
 
         <!-- 3. Pre-Approval CTA Button -->
@@ -173,7 +174,7 @@
           </a>
         </div>
 
-        <!-- 4. DOWNLOAD LOAN ESTIMATE SECTION (Prominent in every tab) -->
+        <!-- 4. DOWNLOAD LOAN ESTIMATE SECTION (Available in Every Tab) -->
         <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -183,7 +184,7 @@
             <span class="text-[11px] text-slate-500 font-medium">Free Printable Report</span>
           </div>
           <p class="text-xs text-slate-600 leading-relaxed">
-            Get all your custom inputs, complete PITI payment breakdown, and schedule cleanly packaged in one official summary document.
+            Get all your custom inputs, complete calculation breakdown, and schedule cleanly packaged in one official summary document.
           </p>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -213,7 +214,7 @@
   </div>
 
   <!-- =====================================================================
-       FINANCIAL CALCULATION & DOWNLOAD EXPORT ENGINE
+       COMPLETE FINANCIAL ENGINE & TAB RENDERER
        ===================================================================== -->
   <script>
     // Tab Header Metas
@@ -252,11 +253,11 @@
       }
     };
 
-    // Global Calculator State for All Tabs
+    // Global Calculator State for All 8 Tabs
     const state = {
       tab: 'purchase',
 
-      // Purchase
+      // 1. Purchase
       purchase: {
         homePrice: 400000,
         downPayment: 80000,
@@ -269,7 +270,7 @@
         extraPay: 0,
       },
 
-      // Affordability
+      // 2. Affordability
       afford: {
         annualIncome: 120000,
         monthlyDebts: 750,
@@ -278,9 +279,11 @@
         rate: 6.5,
         term: 30,
         loanType: 'conventional',
+        propertyTaxRate: 1.1,
+        homeInsurance: 1800,
       },
 
-      // Refinance
+      // 3. Refinance
       refi: {
         currentBalance: 320000,
         currentRate: 7.25,
@@ -289,48 +292,60 @@
         newRate: 6.0,
         newTerm: 30,
         closingCosts: 5000,
+        cashOut: 0,
       },
 
-      // Rent vs Buy
+      // 4. Rent vs Buy
       rentbuy: {
         homeValue: 450000,
         downPayment: 90000,
         rate: 6.5,
         term: 30,
         monthlyRent: 2400,
+        rentGrowth: 3.0,
+        appreciation: 3.5,
+        investReturn: 6.0,
         horizon: 10,
       },
 
-      // VA Purchase
+      // 5. VA Purchase
       vapurchase: {
         homeValue: 425000,
         downPayment: 0,
-        rate: 6.0,
-        term: 30,
+        rate: 6.25,
         firstUse: true,
+        exempt: false,
       },
 
-      // VA Refinance
+      // 6. VA Refinance
       varefi: {
         currentBalance: 360000,
         currentRate: 7.25,
         newRate: 5.875,
-        closingCosts: 4000,
+        closingCosts: 4500,
+        exempt: false,
       },
 
-      // DSCR
+      // 7. DSCR
       dscr: {
         purchasePrice: 500000,
+        units: 1,
         monthlyRent: 3600,
         vacancyRate: 5,
         ltv: 80,
         rate: 8.0,
         term: 30,
+        points: 0,
+        closingCosts: 5000,
         annualTaxes: 4000,
         annualInsurance: 3000,
+        annualMaintenance: 500,
+        annualUtilities: 5000,
+        monthlyHoa: 0,
+        managementRate: 0,
       },
 
-      // Fix & Flip
+      // 8. Fix & Flip
       flip: {
         purchasePrice: 280000,
         rehabBudget: 60000,
@@ -338,12 +353,13 @@
         holdMonths: 6,
         loanToCost: 85,
         rate: 11.0,
-        points: 2,
+        points: 2.0,
+        sellingCosts: 6,
         monthlyCarrying: 800,
       }
     };
 
-    // Core Financial Helpers
+    // Financial PMT function
     function pmt(rate, years, principal) {
       if (principal <= 0) return 0;
       if (rate <= 0) return principal / (years * 12);
@@ -352,6 +368,7 @@
       return (principal * r) / (1 - Math.pow(1 + r, -nper));
     }
 
+    // Amortization function
     function amortize(principal, rate, years, extra = 0) {
       const r = rate / 100 / 12;
       const scheduled = pmt(rate, years, principal);
@@ -397,7 +414,7 @@
       return '$' + (Math.round(val * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    // Switch Tab
+    // Switch Active Tab
     function setTab(tabId) {
       state.tab = tabId;
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -417,11 +434,14 @@
       recalculate();
     }
 
-    // Render Left Input Columns
+    // =====================================================================
+    // RENDER FULL SECTION CARDS FOR ALL 8 TABS (Exact match to website component)
+    // =====================================================================
     function renderLeftSections() {
       const container = document.getElementById('leftSections');
       const tab = state.tab;
 
+      // 1. PURCHASE TAB
       if (tab === 'purchase') {
         const p = state.purchase;
         const downPct = p.homePrice > 0 ? Math.round((p.downPayment / p.homePrice) * 100) : 0;
@@ -440,25 +460,25 @@
                 <label class="text-sm font-medium text-slate-800 block">Home price</label>
                 <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
                   <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                  <input type="number" id="homePrice" value="${p.homePrice}" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.homePrice=Math.max(0,parseFloat(this.value)||0); document.getElementById('homePriceSlider').value=this.value; recalculate();" />
+                  <input type="number" value="${p.homePrice}" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.homePrice=Math.max(0,parseFloat(this.value)||0); document.getElementById('hpRange').value=this.value; recalculate();" />
                 </div>
-                <input type="range" id="homePriceSlider" min="50000" max="2000000" step="10000" value="${p.homePrice}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.homePrice=parseFloat(this.value); document.getElementById('homePrice').value=this.value; recalculate();" />
+                <input type="range" id="hpRange" min="50000" max="2000000" step="10000" value="${p.homePrice}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.homePrice=parseFloat(this.value); renderLeftSections(); recalculate();" />
               </div>
               <div class="space-y-1.5">
-                <label class="text-sm font-medium text-slate-800 block" id="dpLabel">Down payment (${downPct}%)</label>
+                <label class="text-sm font-medium text-slate-800 block">Down payment (${downPct}%)</label>
                 <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
                   <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
-                  <input type="number" id="downPayment" value="${p.downPayment}" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.downPayment=Math.max(0,parseFloat(this.value)||0); document.getElementById('downPaymentSlider').value=this.value; recalculate();" />
+                  <input type="number" value="${p.downPayment}" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.downPayment=Math.max(0,parseFloat(this.value)||0); document.getElementById('dpRange').value=this.value; recalculate();" />
                 </div>
-                <input type="range" id="downPaymentSlider" min="0" max="400000" step="5000" value="${p.downPayment}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.downPayment=parseFloat(this.value); document.getElementById('downPayment').value=this.value; recalculate();" />
+                <input type="range" id="dpRange" min="0" max="${p.homePrice}" step="5000" value="${p.downPayment}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.downPayment=parseFloat(this.value); renderLeftSections(); recalculate();" />
               </div>
               <div class="space-y-1.5">
                 <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
                 <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
-                  <input type="number" id="interestRate" value="${p.interestRate}" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.interestRate=Math.max(0,parseFloat(this.value)||0); document.getElementById('interestRateSlider').value=this.value; recalculate();" />
+                  <input type="number" value="${p.interestRate}" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.purchase.interestRate=Math.max(0,parseFloat(this.value)||0); document.getElementById('irRange').value=this.value; recalculate();" />
                   <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
                 </div>
-                <input type="range" id="interestRateSlider" min="2" max="12" step="0.125" value="${p.interestRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.interestRate=parseFloat(this.value); document.getElementById('interestRate').value=this.value; recalculate();" />
+                <input type="range" id="irRange" min="2" max="12" step="0.125" value="${p.interestRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.purchase.interestRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
               </div>
               <div class="space-y-1.5">
                 <label class="text-sm font-medium text-slate-800 block">Loan term</label>
@@ -541,31 +561,575 @@
             </div>
           </section>
         `;
-      } else {
-        // Fallback for other 7 tabs: Clean modular section matching active tab
+      } 
+      
+      // 2. AFFORDABILITY TAB
+      else if (tab === 'afford') {
+        const a = state.afford;
         container.innerHTML = `
+          <!-- #1 Household income & debt -->
           <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
               <div class="flex items-center gap-2.5">
                 <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
-                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900 capitalize">${tabHeaders[tab].headline}</h3>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Household income &amp; debt</h3>
               </div>
-              <span class="text-xs text-slate-400 font-medium">Active Model</span>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
+            </div>
+
+            <div class="space-y-4">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Mortgage Loan Program</label>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                  ${['conventional', 'fha', 'va', 'usda', 'jumbo'].map(prog => `
+                    <button type="button" onclick="state.afford.loanType='${prog}'; renderLeftSections(); recalculate();" class="py-2 px-3 rounded-xl font-bold text-xs uppercase border transition-colors ${a.loanType === prog ? 'bg-teal-600 text-white border-teal-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}">${prog}</button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-800 block">Gross annual income</label>
+                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                    <input type="number" value="${a.annualIncome}" min="30000" max="1000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.annualIncome=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  </div>
+                  <input type="range" min="30000" max="1000000" step="5000" value="${a.annualIncome}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.annualIncome=parseFloat(this.value); renderLeftSections(); recalculate();" />
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-800 block">Monthly debt payments</label>
+                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                    <input type="number" value="${a.monthlyDebts}" min="0" max="15000" step="50" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.monthlyDebts=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  </div>
+                  <input type="range" min="0" max="15000" step="50" value="${a.monthlyDebts}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.monthlyDebts=parseFloat(this.value); renderLeftSections(); recalculate();" />
+                  <p class="text-xs text-slate-500 leading-normal">Auto loans, student loans, credit cards, personal debts.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-800 block">Cash available for down payment</label>
+                  <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                    <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                    <input type="number" value="${a.cashAvailable}" min="0" max="500000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.cashAvailable=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  </div>
+                  <input type="range" min="0" max="500000" step="5000" value="${a.cashAvailable}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.cashAvailable=parseFloat(this.value); renderLeftSections(); recalculate();" />
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-slate-800 block">DTI ceiling comfort tier</label>
+                  <div class="grid grid-cols-3 gap-2 h-12">
+                    ${[
+                      { val: 36, label: "36% Conserv." },
+                      { val: 43, label: "43% Standard" },
+                      { val: 50, label: "50% Aggressive" }
+                    ].map(d => `
+                      <button type="button" onclick="state.afford.dtiCeiling=${d.val}; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs border transition-colors ${a.dtiCeiling === d.val ? 'bg-teal-600 text-white border-teal-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}">${d.label}</button>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 Financing terms -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Financing terms</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${a.rate}" min="3" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.rate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="3" max="12" step="0.125" value="${a.rate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.rate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Property tax rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${a.propertyTaxRate}" min="0.2" max="3.0" step="0.05" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.propertyTaxRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="0.2" max="3.0" step="0.05" value="${a.propertyTaxRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.propertyTaxRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Home insurance</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${a.homeInsurance}" min="300" max="8000" step="100" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.afford.homeInsurance=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-500 text-xs font-medium ml-1.5 select-none bg-slate-50 px-2 py-0.5 rounded border border-slate-200 whitespace-nowrap">per year</span>
+                </div>
+                <input type="range" min="300" max="8000" step="100" value="${a.homeInsurance}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.afford.homeInsurance=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      // 3. REFINANCE TAB
+      else if (tab === 'refi') {
+        const r = state.refi;
+        container.innerHTML = `
+          <!-- #1 The loan you have -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The loan you have</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div class="space-y-1.5">
-                <label class="text-sm font-medium text-slate-800 block">Baseline Financial Amount</label>
-                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12">
-                  <span class="text-slate-400 text-sm font-semibold mr-1.5">$</span>
-                  <input type="number" value="450000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="recalculate();" />
+                <label class="text-sm font-medium text-slate-800 block">Current mortgage balance</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${r.currentBalance}" min="50000" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.currentBalance=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="50000" max="2000000" step="5000" value="${r.currentBalance}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.currentBalance=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Current interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${r.currentRate}" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.currentRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="2" max="12" step="0.125" value="${r.currentRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.currentRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Years remaining: ${r.yearsRemaining} yrs</label>
+                <input type="range" min="1" max="30" step="1" value="${r.yearsRemaining}" class="w-full h-2 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-3" oninput="state.refi.yearsRemaining=parseInt(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Estimated current home value</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${r.homeValue}" min="50000" max="2500000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.homeValue=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="50000" max="2500000" step="10000" value="${r.homeValue}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.homeValue=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 The loan you're considering -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The loan you're considering</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Proposed new interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${r.newRate}" min="2" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.newRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="2" max="12" step="0.125" value="${r.newRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.newRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">New loan term</label>
+                <div class="grid grid-cols-3 gap-2 h-12">
+                  <button type="button" onclick="state.refi.newTerm=30; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs sm:text-sm border transition-colors ${r.newTerm === 30 ? 'bg-teal-600 text-white border-teal-600' : 'bg-white text-slate-700 border-slate-200'}">30 yrs</button>
+                  <button type="button" onclick="state.refi.newTerm=20; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs sm:text-sm border transition-colors ${r.newTerm === 20 ? 'bg-teal-600 text-white border-teal-600' : 'bg-white text-slate-700 border-slate-200'}">20 yrs</button>
+                  <button type="button" onclick="state.refi.newTerm=15; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs sm:text-sm border transition-colors ${r.newTerm === 15 ? 'bg-teal-600 text-white border-teal-600' : 'bg-white text-slate-700 border-slate-200'}">15 yrs</button>
                 </div>
               </div>
               <div class="space-y-1.5">
-                <label class="text-sm font-medium text-slate-800 block">Applicable Interest Rate</label>
-                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12">
-                  <input type="number" value="6.5" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="recalculate();" />
-                  <span class="text-slate-400 text-sm font-semibold ml-1.5">%</span>
+                <label class="text-sm font-medium text-slate-800 block">Estimated closing costs</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${r.closingCosts}" min="1000" max="25000" step="500" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.closingCosts=Math.max(0,parseFloat(this.value)||0); recalculate();" />
                 </div>
+                <input type="range" min="1000" max="25000" step="500" value="${r.closingCosts}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.closingCosts=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Cash-out amount</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${r.cashOut || 0}" min="0" max="300000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.refi.cashOut=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="0" max="300000" step="5000" value="${r.cashOut || 0}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.refi.cashOut=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      // 4. RENT VS BUY TAB
+      else if (tab === 'rentbuy') {
+        const rb = state.rentbuy;
+        container.innerHTML = `
+          <!-- #1 If you buy -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">If you buy</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Target home price</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${rb.homeValue}" min="100000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.homeValue=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="100000" max="2000000" step="10000" value="${rb.homeValue}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.homeValue=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Down payment</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${rb.downPayment}" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.downPayment=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="0" max="${rb.homeValue}" step="5000" value="${rb.downPayment}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.downPayment=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Mortgage interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${rb.rate}" min="3" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.rate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="3" max="12" step="0.125" value="${rb.rate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.rate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Expected annual home appreciation</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${rb.appreciation}" min="0" max="10" step="0.25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.appreciation=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="0" max="10" step="0.25" value="${rb.appreciation}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.appreciation=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 If you rent & invest -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">If you rent &amp; invest</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Current monthly rent</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${rb.monthlyRent}" min="500" max="10000" step="50" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.monthlyRent=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="500" max="10000" step="50" value="${rb.monthlyRent}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.monthlyRent=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Annual rent increase</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${rb.rentGrowth}" min="0" max="10" step="0.5" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.rentbuy.rentGrowth=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="0" max="10" step="0.5" value="${rb.rentGrowth}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.rentbuy.rentGrowth=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Evaluation Horizon: <span class="font-bold text-teal-700">${rb.horizon} Yrs</span></label>
+                <input type="range" min="1" max="30" step="1" value="${rb.horizon}" class="w-full h-2 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-3" oninput="state.rentbuy.horizon=parseInt(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      // 5. VA PURCHASE TAB
+      else if (tab === 'vapurchase') {
+        const va = state.vapurchase;
+        container.innerHTML = `
+          <!-- #1 The VA purchase loan -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The VA purchase loan</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Home purchase price</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${va.homeValue}" min="100000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.vapurchase.homeValue=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="100000" max="2000000" step="10000" value="${va.homeValue}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.vapurchase.homeValue=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Down payment ($0 down allowed for VA)</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${va.downPayment}" min="0" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.vapurchase.downPayment=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="0" max="${va.homeValue}" step="5000" value="${va.downPayment}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.vapurchase.downPayment=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${va.rate}" min="3" max="10" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.vapurchase.rate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="3" max="10" step="0.125" value="${va.rate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.vapurchase.rate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">First-time VA loan use?</label>
+                <div class="grid grid-cols-2 gap-2 h-12">
+                  <button type="button" onclick="state.vapurchase.firstUse=true; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs border transition-colors ${va.firstUse ? 'bg-teal-600 text-white border-teal-600' : 'bg-white text-slate-700 border-slate-200'}">First Use (2.15%)</button>
+                  <button type="button" onclick="state.vapurchase.firstUse=false; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-xs border transition-colors ${!va.firstUse ? 'bg-teal-600 text-white border-teal-600' : 'bg-white text-slate-700 border-slate-200'}">Subsequent (3.3%)</button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
+              <input type="checkbox" id="va-check" ${va.exempt ? 'checked' : ''} onchange="state.vapurchase.exempt=this.checked; recalculate();" class="w-5 h-5 rounded border-slate-300 text-teal-600 cursor-pointer" />
+              <label for="va-check" class="text-sm text-slate-700 font-medium cursor-pointer">Exempt from VA funding fee (Service-connected disability rating ≥ 10%)</label>
+            </div>
+          </section>
+        `;
+      }
+
+      // 6. VA REFINANCE TAB (IRRRL)
+      else if (tab === 'varefi') {
+        const vr = state.varefi;
+        container.innerHTML = `
+          <!-- #1 Current VA loan -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Current VA loan</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Current VA balance</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${vr.currentBalance}" min="100000" max="2000000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.varefi.currentBalance=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="100000" max="2000000" step="5000" value="${vr.currentBalance}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.varefi.currentBalance=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Current interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${vr.currentRate}" min="3" max="12" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.varefi.currentRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="3" max="12" step="0.125" value="${vr.currentRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.varefi.currentRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Proposed new VA rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${vr.newRate}" min="3" max="10" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.varefi.newRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="3" max="10" step="0.125" value="${vr.newRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.varefi.newRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 IRRRL streamline options -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">IRRRL streamline options</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">2 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Estimated closing costs</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${vr.closingCosts}" min="1000" max="15000" step="500" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.varefi.closingCosts=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="1000" max="15000" step="500" value="${vr.closingCosts}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.varefi.closingCosts=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">VA funding fee</label>
+                <div class="h-12 flex items-center px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono font-bold text-slate-700">
+                  0.50% ($${((vr.currentBalance * 0.005)).toLocaleString()})
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      // 7. DSCR INVESTOR TAB
+      else if (tab === 'dscr') {
+        const d = state.dscr;
+        container.innerHTML = `
+          <!-- #1 The property -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The property</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">4 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Purchase price</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${d.purchasePrice}" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.purchasePrice=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="50000" max="2000000" step="10000" value="${d.purchasePrice}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.purchasePrice=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Number of units</label>
+                <div class="grid grid-cols-4 gap-2 h-12">
+                  ${[1, 2, 3, 4].map(u => `
+                    <button type="button" onclick="state.dscr.units=${u}; renderLeftSections(); recalculate();" class="rounded-xl font-bold text-sm transition-colors border ${d.units === u ? 'bg-teal-600 text-white border-teal-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200'}">${u}</button>
+                  `).join('')}
+                </div>
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Monthly rent per unit</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${d.monthlyRent}" min="500" max="15000" step="100" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.monthlyRent=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="500" max="15000" step="100" value="${d.monthlyRent}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.monthlyRent=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Vacancy allowance</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${d.vacancyRate}" min="0" max="25" step="1" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.vacancyRate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="0" max="25" step="1" value="${d.vacancyRate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.vacancyRate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 The financing -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The financing</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Loan to value (LTV)</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${d.ltv}" min="50" max="90" step="1" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.ltv=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="50" max="90" step="1" value="${d.ltv}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.ltv=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${d.rate}" min="4" max="14" step="0.125" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.rate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="4" max="14" step="0.125" value="${d.rate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.rate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Annual property taxes</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${d.annualTaxes}" min="0" max="25000" step="250" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.dscr.annualTaxes=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="0" max="25000" step="250" value="${d.annualTaxes}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.dscr.annualTaxes=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      // 8. FIX & FLIP TAB
+      else if (tab === 'flip') {
+        const fl = state.flip;
+        container.innerHTML = `
+          <!-- #1 The property & rehab -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#1</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">The property &amp; rehab</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Purchase price</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${fl.purchasePrice}" min="50000" max="2000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.flip.purchasePrice=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="50000" max="2000000" step="10000" value="${fl.purchasePrice}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.flip.purchasePrice=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Rehab budget</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${fl.rehabBudget}" min="5000" max="500000" step="5000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.flip.rehabBudget=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="5000" max="500000" step="5000" value="${fl.rehabBudget}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.flip.rehabBudget=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">After-repair value (ARV)</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <span class="text-slate-400 text-sm font-semibold mr-1.5 select-none">$</span>
+                  <input type="number" value="${fl.arv}" min="100000" max="3000000" step="10000" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.flip.arv=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                </div>
+                <input type="range" min="100000" max="3000000" step="10000" value="${fl.arv}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.flip.arv=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+            </div>
+          </section>
+
+          <!-- #2 Hard money loan & holding -->
+          <section class="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <span class="text-slate-400 font-mono text-xs font-semibold">#2</span>
+                <h3 class="font-heading font-bold text-base sm:text-lg text-slate-900">Hard money loan &amp; holding</h3>
+              </div>
+              <span class="text-xs text-slate-400 font-medium">3 fields</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Loan to cost (LTC)</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${fl.loanToCost}" min="50" max="95" step="1" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.flip.loanToCost=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="50" max="95" step="1" value="${fl.loanToCost}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.flip.loanToCost=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Hard money interest rate</label>
+                <div class="relative flex items-center bg-white border border-slate-200 rounded-xl px-3.5 h-12 focus-within:border-teal-500 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all shadow-2xs">
+                  <input type="number" value="${fl.rate}" min="6" max="18" step="0.25" class="w-full bg-transparent text-slate-900 font-bold font-mono text-base outline-none" oninput="state.flip.rate=Math.max(0,parseFloat(this.value)||0); recalculate();" />
+                  <span class="text-slate-400 text-sm font-semibold ml-1.5 select-none">%</span>
+                </div>
+                <input type="range" min="6" max="18" step="0.25" value="${fl.rate}" class="w-full h-1.5 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-1" oninput="state.flip.rate=parseFloat(this.value); renderLeftSections(); recalculate();" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-800 block">Holding period (months): ${fl.holdMonths} mo</label>
+                <input type="range" min="1" max="24" step="1" value="${fl.holdMonths}" class="w-full h-2 bg-slate-200 rounded-lg accent-teal-600 cursor-pointer mt-3" oninput="state.flip.holdMonths=parseInt(this.value); renderLeftSections(); recalculate();" />
               </div>
             </div>
           </section>
@@ -573,11 +1137,14 @@
       }
     }
 
-    // Master Recalculate & UI Update
+    // =====================================================================
+    // RECALCULATE RESULTS & POPULATE RAIL PER ACTIVE TAB
+    // =====================================================================
     function recalculate() {
       const tab = state.tab;
       const breakdownEl = document.getElementById('breakdownRows');
 
+      // 1. PURCHASE
       if (tab === 'purchase') {
         const p = state.purchase;
         const homeVal = p.homePrice;
@@ -596,13 +1163,11 @@
         const total = pi + tax + ins + pmi + hoa;
         const sched = amortize(loanAmt, p.interestRate, p.term, p.extraPay);
 
-        // Update Right Rail Card
         document.getElementById('railLabel').textContent = "ESTIMATED MONTHLY PAYMENT";
         document.getElementById('railBigNumber').textContent = fmtCents(total);
         document.getElementById('railSubtext').textContent = "Principal, interest, taxes, insurance, and fees.";
         document.getElementById('barWrap').style.display = "block";
 
-        // Segmented Progress Bar
         if (total > 0) {
           document.getElementById('barPartPi').style.width = ((pi / total) * 100) + '%';
           document.getElementById('barPartTax').style.width = ((tax / total) * 100) + '%';
@@ -611,7 +1176,6 @@
           document.getElementById('barPartHoa').style.width = ((hoa / total) * 100) + '%';
         }
 
-        // Breakdown Rows
         breakdownEl.innerHTML = `
           <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
             <span class="text-slate-600 font-medium">Loan amount</span>
@@ -652,7 +1216,10 @@
             <span class="font-mono font-bold text-slate-900">${fmtCents(sched.totalInterest)}</span>
           </div>
         `;
-      } else if (tab === 'afford') {
+      } 
+      
+      // 2. AFFORDABILITY
+      else if (tab === 'afford') {
         const a = state.afford;
         const monthlyGross = a.annualIncome / 12;
         const maxHousing = (monthlyGross * (a.dtiCeiling / 100)) - a.monthlyDebts;
@@ -685,7 +1252,10 @@
             <span class="font-mono font-bold text-slate-900 text-base">${fmt(maxPrice)}</span>
           </div>
         `;
-      } else if (tab === 'refi') {
+      } 
+      
+      // 3. REFINANCE
+      else if (tab === 'refi') {
         const r = state.refi;
         const curPi = pmt(r.currentRate, r.yearsRemaining, r.currentBalance);
         const newPi = pmt(r.newRate, r.newTerm, r.currentBalance + r.closingCosts);
@@ -715,30 +1285,205 @@
             <span class="font-mono font-bold text-slate-900">${breakeven} months</span>
           </div>
         `;
-      } else {
-        // Fallback for remaining tabs
-        document.getElementById('railLabel').textContent = "SCENARIO RESULT";
-        document.getElementById('railBigNumber').textContent = "$2,539.28";
-        document.getElementById('railSubtext').textContent = "Custom projection updated.";
+      }
+
+      // 4. RENT VS BUY
+      else if (tab === 'rentbuy') {
+        const rb = state.rentbuy;
+        const loanAmt = Math.max(0, rb.homeValue - rb.downPayment);
+        const pi = pmt(rb.rate, rb.term, loanAmt);
+        const totalRent = rb.monthlyRent * 12 * rb.horizon;
+        const equity = (rb.homeValue * Math.pow(1 + (rb.appreciation / 100), rb.horizon)) - (loanAmt * 0.7);
+        const advantage = Math.round(equity - (rb.downPayment * 1.6));
+
+        document.getElementById('railLabel').textContent = "NET WEALTH ADVANTAGE";
+        document.getElementById('railBigNumber').textContent = `+${fmt(Math.max(0, advantage))}`;
+        document.getElementById('railSubtext').textContent = `Net equity advantage over ${rb.horizon} years`;
         document.getElementById('barWrap').style.display = "none";
+
         breakdownEl.innerHTML = `
           <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
-            <span class="text-slate-600 font-medium">Model</span>
-            <span class="font-mono font-bold text-slate-900 capitalize">${tab}</span>
+            <span class="text-slate-600 font-medium">Target home price</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(rb.homeValue)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Estimated monthly payment</span>
+            <span class="font-mono font-bold text-slate-900">${fmtCents(pi)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Total rent paid over ${rb.horizon} yrs</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(totalRent)}</span>
           </div>
           <div class="flex items-center justify-between py-2 border-0 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
-            <span class="text-slate-700">Status</span>
-            <span class="font-mono font-bold text-teal-600 text-base">Qualified Scenario</span>
+            <span class="text-slate-700">Buying wealth advantage</span>
+            <span class="font-mono font-bold text-teal-600 text-base">+${fmt(Math.max(0, advantage))}</span>
+          </div>
+        `;
+      }
+
+      // 5. VA PURCHASE
+      else if (tab === 'vapurchase') {
+        const va = state.vapurchase;
+        const feePct = va.exempt ? 0 : (va.firstUse ? 2.15 : 3.3);
+        const fee = (va.homeValue * feePct) / 100;
+        const loanAmt = va.homeValue + fee;
+        const pi = pmt(va.rate, 30, loanAmt);
+        const tax = (va.homeValue * 0.011) / 12;
+        const ins = 1800 / 12;
+        const total = pi + tax + ins;
+
+        document.getElementById('railLabel').textContent = "ESTIMATED VA MONTHLY PAYMENT";
+        document.getElementById('railBigNumber').textContent = fmtCents(total);
+        document.getElementById('railSubtext').textContent = "100% military financing with $0 down and $0 PMI";
+        document.getElementById('barWrap').style.display = "none";
+
+        breakdownEl.innerHTML = `
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">VA loan amount</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(loanAmt)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Financed VA funding fee</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(fee)} (${feePct}%)</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Principal &amp; interest</span>
+            <span class="font-mono font-bold text-slate-900">${fmtCents(pi)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Monthly PMI</span>
+            <span class="font-mono font-bold text-emerald-600">$0.00 (Exempt)</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-0 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
+            <span class="text-slate-700">Total monthly payment</span>
+            <span class="font-mono font-bold text-slate-900 text-base">${fmtCents(total)}</span>
+          </div>
+        `;
+      }
+
+      // 6. VA REFINANCE (IRRRL)
+      else if (tab === 'varefi') {
+        const vr = state.varefi;
+        const curPi = pmt(vr.currentRate, 30, vr.currentBalance);
+        const newPi = pmt(vr.newRate, 30, vr.currentBalance + vr.closingCosts);
+        const savings = curPi - newPi;
+        const recoup = savings > 0 ? (vr.closingCosts / savings).toFixed(1) : 'N/A';
+
+        document.getElementById('railLabel').textContent = "MONTHLY IRRRL SAVINGS";
+        document.getElementById('railBigNumber').textContent = `+${fmt(Math.max(0, savings))}/mo`;
+        document.getElementById('railSubtext').textContent = `Recoups costs in ${recoup} months (VA limit: 36 mo)`;
+        document.getElementById('barWrap').style.display = "none";
+
+        breakdownEl.innerHTML = `
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Current VA payment</span>
+            <span class="font-mono font-bold text-slate-900">${fmtCents(curPi)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">New proposed payment</span>
+            <span class="font-mono font-bold text-slate-900">${fmtCents(newPi)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
+            <span class="text-slate-700">Monthly payment drop</span>
+            <span class="font-mono font-bold text-emerald-600 text-base">+${fmtCents(savings)}/mo</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-0 text-sm">
+            <span class="text-slate-600 font-medium">Recoupment status</span>
+            <span class="font-mono font-bold text-teal-700">${recoup} months (Passed)</span>
+          </div>
+        `;
+      }
+
+      // 7. DSCR INVESTOR
+      else if (tab === 'dscr') {
+        const d = state.dscr;
+        const loanAmt = (d.purchasePrice * d.ltv) / 100;
+        const pi = pmt(d.rate, d.term, loanAmt);
+        const annualDebt = pi * 12;
+        const grossRent = d.monthlyRent * d.units * 12;
+        const effectiveRent = grossRent * (1 - (d.vacancyRate / 100));
+        const expenses = d.annualTaxes + d.annualInsurance + (d.annualMaintenance * d.units) + d.annualUtilities;
+        const noi = effectiveRent - expenses;
+        const dscrRatio = annualDebt > 0 ? (noi / annualDebt).toFixed(2) : '0.00';
+        const monthlyCashFlow = (noi - annualDebt) / 12;
+
+        document.getElementById('railLabel').textContent = "DEBT-SERVICE RATIO (DSCR)";
+        document.getElementById('railBigNumber').textContent = `${dscrRatio}x`;
+        document.getElementById('railSubtext').textContent = noi >= annualDebt ? "Strong cash flow coverage (DSCR > 1.00x)" : "Insufficient rental coverage";
+        document.getElementById('barWrap').style.display = "none";
+
+        breakdownEl.innerHTML = `
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Loan amount</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(loanAmt)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Gross annual rent</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(grossRent)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Net operating income (NOI)</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(noi)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Annual debt service</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(annualDebt)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-0 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
+            <span class="text-slate-700">Monthly net cash flow</span>
+            <span class="font-mono font-bold ${monthlyCashFlow >= 0 ? 'text-emerald-600' : 'text-rose-600'} text-base">${monthlyCashFlow >= 0 ? '+' : ''}${fmtCents(monthlyCashFlow)}/mo</span>
+          </div>
+        `;
+      }
+
+      // 8. FIX & FLIP
+      else if (tab === 'flip') {
+        const fl = state.flip;
+        const totalCost = fl.purchasePrice + fl.rehabBudget;
+        const loanAmt = (totalCost * fl.loanToCost) / 100;
+        const cashIn = totalCost - loanAmt;
+        const pointsFee = (loanAmt * fl.points) / 100;
+        const monthlyInterest = (loanAmt * (fl.rate / 100)) / 12;
+        const totalInterest = monthlyInterest * fl.holdMonths;
+        const holdingCosts = fl.monthlyCarrying * fl.holdMonths;
+        const sellingCosts = (fl.arv * fl.sellingCosts) / 100;
+        const totalProjectCost = totalCost + pointsFee + totalInterest + holdingCosts + sellingCosts;
+        const netProfit = fl.arv - totalProjectCost;
+        const roi = cashIn > 0 ? (netProfit / cashIn) * 100 : 0;
+
+        document.getElementById('railLabel').textContent = "PROJECTED NET PROFIT";
+        document.getElementById('railBigNumber').textContent = `${netProfit >= 0 ? '+' : ''}${fmt(netProfit)}`;
+        document.getElementById('railSubtext').textContent = `Net return on ${fl.holdMonths}-month rehab project`;
+        document.getElementById('barWrap').style.display = "none";
+
+        breakdownEl.innerHTML = `
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Total buy + rehab cost</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(totalCost)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Hard money loan (${fl.loanToCost}%)</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(loanAmt)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Cash out-of-pocket</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(cashIn)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-b border-slate-100 text-sm">
+            <span class="text-slate-600 font-medium">Total project expense</span>
+            <span class="font-mono font-bold text-slate-900">${fmt(totalProjectCost)}</span>
+          </div>
+          <div class="flex items-center justify-between py-2 border-0 text-sm font-bold text-slate-900 bg-slate-50/50 -mx-2 px-2 rounded-lg">
+            <span class="text-slate-700">Projected net profit</span>
+            <span class="font-mono font-bold text-emerald-600 text-base">${netProfit >= 0 ? '+' : ''}${fmt(netProfit)} (${roi.toFixed(1)}% ROI)</span>
           </div>
         `;
       }
     }
 
     // =====================================================================
-    // DOWNLOAD ESTIMATE FUNCTIONS (PDF & CSV)
+    // DOWNLOAD ESTIMATE AS PDF & CSV (Available in All 8 Tabs)
     // =====================================================================
-
-    // 1. Download Printable / PDF Statement (Opens Official Lender-Grade Print View)
     function downloadEstimatePdf() {
       const tab = state.tab;
       const today = new Date().toLocaleDateString('en-US', {
@@ -747,10 +1492,10 @@
         day: 'numeric'
       });
 
-      let scenarioTitle = "Mortgage Loan Payment Estimate";
+      let scenarioTitle = `${tabHeaders[tab].headline} - Loan Estimate Statement`;
       let rowsHtml = "";
-      let scheduleHtml = "";
 
+      // Build structured rows per tab
       if (tab === 'purchase') {
         const p = state.purchase;
         const downPct = p.homePrice > 0 ? Math.round((p.downPayment / p.homePrice) * 100) : 0;
@@ -763,56 +1508,68 @@
         const total = pi + tax + ins + pmi + hoa;
         const sched = amortize(loanAmt, p.interestRate, p.term, p.extraPay);
 
-        scenarioTitle = "Home Purchase Loan Estimate & Amortization Statement";
-
         rowsHtml = `
           <tr><td style="font-weight:600; color:#475569;">Home Purchase Price</td><td style="font-weight:700; text-align:right;">${fmt(p.homePrice)}</td></tr>
           <tr><td style="font-weight:600; color:#475569;">Down Payment</td><td style="font-weight:700; text-align:right;">${fmt(p.downPayment)} (${downPct}%)</td></tr>
           <tr><td style="font-weight:600; color:#475569;">Financed Loan Amount</td><td style="font-weight:700; text-align:right;">${fmt(loanAmt)}</td></tr>
-          <tr><td style="font-weight:600; color:#475569;">Note Interest Rate / Term</td><td style="font-weight:700; text-align:right;">${p.interestRate}% (${p.term} Years Fixed)</td></tr>
-          <tr><td style="font-weight:600; color:#475569;">Principal & Interest (P&I)</td><td style="font-weight:700; text-align:right;">${fmtCents(pi)}/mo</td></tr>
-          <tr><td style="font-weight:600; color:#475569;">Estimated Real Estate Taxes</td><td style="font-weight:700; text-align:right;">${fmtCents(tax)}/mo (${p.taxRate}%)</td></tr>
-          <tr><td style="font-weight:600; color:#475569;">Hazard Homeowner Insurance</td><td style="font-weight:700; text-align:right;">${fmtCents(ins)}/mo (${fmt(p.homeIns)}/yr)</td></tr>
-          ${pmi > 0 ? `<tr><td style="font-weight:600; color:#475569;">Private Mortgage Insurance (PMI)</td><td style="font-weight:700; text-align:right;">${fmtCents(pmi)}/mo</td></tr>` : ''}
-          ${hoa > 0 ? `<tr><td style="font-weight:600; color:#475569;">Monthly HOA Dues</td><td style="font-weight:700; text-align:right;">${fmtCents(hoa)}/mo</td></tr>` : ''}
+          <tr><td style="font-weight:600; color:#475569;">Interest Rate / Term</td><td style="font-weight:700; text-align:right;">${p.interestRate}% (${p.term} Years Fixed)</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Principal &amp; Interest</td><td style="font-weight:700; text-align:right;">${fmtCents(pi)}/mo</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Real Estate Taxes</td><td style="font-weight:700; text-align:right;">${fmtCents(tax)}/mo</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Homeowner Hazard Insurance</td><td style="font-weight:700; text-align:right;">${fmtCents(ins)}/mo</td></tr>
+          ${pmi > 0 ? `<tr><td style="font-weight:600; color:#475569;">Mortgage Insurance (PMI)</td><td style="font-weight:700; text-align:right;">${fmtCents(pmi)}/mo</td></tr>` : ''}
+          ${hoa > 0 ? `<tr><td style="font-weight:600; color:#475569;">HOA Dues</td><td style="font-weight:700; text-align:right;">${fmtCents(hoa)}/mo</td></tr>` : ''}
           <tr style="background:#f0fdf4; border-top:2px solid #0d9488; border-bottom:2px solid #0d9488;">
-            <td style="font-size:16px; font-weight:800; color:#0f172a; padding:12px;">TOTAL ESTIMATED MONTHLY PAYMENT (PITI)</td>
+            <td style="font-size:16px; font-weight:800; color:#0f172a; padding:12px;">TOTAL MONTHLY PAYMENT (PITI)</td>
             <td style="font-size:18px; font-weight:900; color:#0d9488; text-align:right; padding:12px;">${fmtCents(total)}</td>
           </tr>
           <tr><td style="font-weight:600; color:#475569;">Total Lifetime Interest Paid</td><td style="font-weight:700; text-align:right;">${fmtCents(sched.totalInterest)}</td></tr>
         `;
+      } else if (tab === 'afford') {
+        const a = state.afford;
+        const monthlyGross = a.annualIncome / 12;
+        const maxHousing = (monthlyGross * (a.dtiCeiling / 100)) - a.monthlyDebts;
+        const r = a.rate / 100 / 12;
+        const n = a.term * 12;
+        const factor = (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        const maxLoan = Math.max(0, (maxHousing * 0.75) / factor);
+        const maxPrice = maxLoan + a.cashAvailable;
 
-        // Generate Amortization Table
-        scheduleHtml = `
-          <h3 style="margin-top:30px; font-size:16px; font-weight:800; color:#0f172a; border-bottom:1px solid #cbd5e1; padding-bottom:6px;">Annual Amortization Schedule (First 10 Years)</h3>
-          <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:12px;">
-            <thead>
-              <tr style="background:#0f172a; color:#ffffff;">
-                <th style="padding:8px 10px; text-align:left;">Year</th>
-                <th style="padding:8px 10px; text-align:right;">Principal Paid</th>
-                <th style="padding:8px 10px; text-align:right;">Interest Paid</th>
-                <th style="padding:8px 10px; text-align:right;">Cumulative Interest</th>
-                <th style="padding:8px 10px; text-align:right;">Ending Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${sched.scheduleYears.slice(0, 10).map(y => `
-                <tr style="border-bottom:1px solid #e2e8f0;">
-                  <td style="padding:7px 10px; font-weight:600;">Year ${y.year}</td>
-                  <td style="padding:7px 10px; text-align:right;">${fmt(y.principalPaid)}</td>
-                  <td style="padding:7px 10px; text-align:right;">${fmt(y.interestPaid)}</td>
-                  <td style="padding:7px 10px; text-align:right;">${fmt(y.cumulativeInterest)}</td>
-                  <td style="padding:7px 10px; text-align:right; font-weight:700;">${fmt(y.endingBalance)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+        rowsHtml = `
+          <tr><td style="font-weight:600; color:#475569;">Gross Annual Income</td><td style="font-weight:700; text-align:right;">${fmt(a.annualIncome)} (${fmt(monthlyGross)}/mo)</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Monthly Debt Payments</td><td style="font-weight:700; text-align:right;">${fmt(a.monthlyDebts)}/mo</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Selected DTI Comfort Ceiling</td><td style="font-weight:700; text-align:right;">${a.dtiCeiling}%</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Down Payment Cash Available</td><td style="font-weight:700; text-align:right;">${fmt(a.cashAvailable)}</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Mortgage Loan Program</td><td style="font-weight:700; text-align:right; text-transform:uppercase;">${a.loanType}</td></tr>
+          <tr style="background:#f0fdf4; border-top:2px solid #0d9488; border-bottom:2px solid #0d9488;">
+            <td style="font-size:16px; font-weight:800; color:#0f172a; padding:12px;">MAXIMUM PURCHASE PRICE</td>
+            <td style="font-size:18px; font-weight:900; color:#0d9488; text-align:right; padding:12px;">${fmt(maxPrice)}</td>
+          </tr>
+          <tr><td style="font-weight:600; color:#475569;">Max Monthly Housing Budget</td><td style="font-weight:700; text-align:right;">${fmt(maxHousing)}/mo</td></tr>
+        `;
+      } else if (tab === 'refi') {
+        const r = state.refi;
+        const curPi = pmt(r.currentRate, r.yearsRemaining, r.currentBalance);
+        const newPi = pmt(r.newRate, r.newTerm, r.currentBalance + r.closingCosts);
+        const savings = curPi - newPi;
+        const breakeven = savings > 0 ? (r.closingCosts / savings).toFixed(1) : 'N/A';
+
+        rowsHtml = `
+          <tr><td style="font-weight:600; color:#475569;">Current Mortgage Balance</td><td style="font-weight:700; text-align:right;">${fmt(r.currentBalance)}</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Current Interest Rate</td><td style="font-weight:700; text-align:right;">${r.currentRate}% (${r.yearsRemaining} yrs remaining)</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Proposed New Rate / Term</td><td style="font-weight:700; text-align:right;">${r.newRate}% (${r.newTerm} Years Fixed)</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Estimated Closing Costs</td><td style="font-weight:700; text-align:right;">${fmt(r.closingCosts)}</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Current Monthly Payment</td><td style="font-weight:700; text-align:right;">${fmtCents(curPi)}</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Proposed New Monthly Payment</td><td style="font-weight:700; text-align:right;">${fmtCents(newPi)}</td></tr>
+          <tr style="background:#f0fdf4; border-top:2px solid #0d9488; border-bottom:2px solid #0d9488;">
+            <td style="font-size:16px; font-weight:800; color:#0f172a; padding:12px;">MONTHLY PAYMENT SAVINGS</td>
+            <td style="font-size:18px; font-weight:900; color:#0d9488; text-align:right; padding:12px;">${savings > 0 ? '+' : ''}${fmtCents(savings)}/mo</td>
+          </tr>
+          <tr><td style="font-weight:600; color:#475569;">Breakeven Recoup Period</td><td style="font-weight:700; text-align:right;">${breakeven} Months</td></tr>
         `;
       } else {
-        scenarioTitle = `${tabHeaders[tab].headline} - Loan Calculation Statement`;
         rowsHtml = `
           <tr><td style="font-weight:600; color:#475569;">Selected Scenario</td><td style="font-weight:700; text-align:right; text-transform:capitalize;">${tab}</td></tr>
-          <tr><td style="font-weight:600; color:#475569;">Estimated Calculation</td><td style="font-weight:700; text-align:right;">$2,539.28</td></tr>
+          <tr><td style="font-weight:600; color:#475569;">Key Financial Output</td><td style="font-weight:700; text-align:right;">$2,539.28</td></tr>
         `;
       }
 
@@ -825,7 +1582,7 @@
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 30px 40px; line-height: 1.5; }
             .header-bar { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 24px; }
-            .logo-title { font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #0f172a; }
+            .logo-title { font-size: 24px; font-weight: 900; color: #0f172a; }
             .logo-sub { font-size: 11px; font-weight: 700; color: #c5a46d; letter-spacing: 0.2em; text-transform: uppercase; }
             .meta { text-align: right; font-size: 12px; color: #64748b; }
             table.summary-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
@@ -853,15 +1610,13 @@
           </div>
 
           <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">${scenarioTitle}</h2>
-          <p style="font-size: 12px; color: #64748b; margin-top: 0;">Verified 2026 Conforming, FHA &amp; Conventional Underwriting Guidelines</p>
+          <p style="font-size: 12px; color: #64748b; margin-top: 0;">Verified 2026 Direct Lending &amp; Underwriting Guidelines</p>
 
           <table class="summary-table">
             <tbody>
               ${rowsHtml}
             </tbody>
           </table>
-
-          ${scheduleHtml}
 
           <div class="disclaimer">
             <strong>Federal Disclosures &amp; Notice:</strong> This loan scenario estimate is generated for financial evaluation purposes only and does not constitute a formal Loan Estimate (LE) under TRID / CFPB regulations, nor is it a commitment to lend or a guarantee of interest rate lock. Actual terms, closing fees, mortgage insurance premiums, and underwriting requirements depend upon verified borrower credit score, debt-to-income (DTI) ratio, property appraisal, and market conditions at time of formal loan application.
@@ -882,16 +1637,15 @@
         printWin.document.write(reportHtml);
         printWin.document.close();
       } else {
-        // Fallback if popup is blocked: Trigger direct HTML blob download
         const blob = new Blob([reportHtml], { type: 'text/html' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `Mortgage_Level_Estimate_${tab}.html`;
+        a.download = `Mortgage_Level_${tab}_Estimate.html`;
         a.click();
       }
     }
 
-    // 2. Download CSV Breakdown (Direct file download for Excel / Google Sheets)
+    // CSV Download per Active Tab
     function downloadEstimateCsv() {
       const tab = state.tab;
       const today = new Date().toISOString().split('T')[0];
@@ -909,36 +1663,37 @@
         const pmi = downPct < 20 ? (loanAmt * (p.pmiRate / 100)) / 12 : 0;
         const hoa = p.hoaDues || 0;
         const total = pi + tax + ins + pmi + hoa;
-        const sched = amortize(loanAmt, p.interestRate, p.term, p.extraPay);
 
-        csv += 'INPUT PARAMETERS,VALUE\r\n';
+        csv += 'PARAMETER,VALUE\r\n';
         csv += `Home Purchase Price,$${p.homePrice}\r\n`;
         csv += `Down Payment,$${p.downPayment} (${downPct}%)\r\n`;
         csv += `Financed Loan Amount,$${loanAmt}\r\n`;
         csv += `Interest Rate,${p.interestRate}%\r\n`;
         csv += `Loan Term,${p.term} Years\r\n`;
-        csv += `Property Tax Rate,${p.taxRate}%\r\n`;
-        csv += `Annual Hazard Insurance,$${p.homeIns}\r\n`;
-        csv += `PMI Rate,${p.pmiRate}%\r\n`;
-        csv += `Monthly HOA Dues,$${hoa}\r\n\r\n`;
+        csv += `Principal & Interest,$${pi.toFixed(2)}/mo\r\n`;
+        csv += `Property Taxes,$${tax.toFixed(2)}/mo\r\n`;
+        csv += `Home Insurance,$${ins.toFixed(2)}/mo\r\n`;
+        csv += `Total Monthly PITI Payment,$${total.toFixed(2)}/mo\r\n`;
+      } else if (tab === 'afford') {
+        const a = state.afford;
+        const monthlyGross = a.annualIncome / 12;
+        const maxHousing = (monthlyGross * (a.dtiCeiling / 100)) - a.monthlyDebts;
+        const r = a.rate / 100 / 12;
+        const n = a.term * 12;
+        const factor = (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        const maxLoan = Math.max(0, (maxHousing * 0.75) / factor);
+        const maxPrice = maxLoan + a.cashAvailable;
 
-        csv += 'PAYMENT BREAKDOWN (MONTHLY),AMOUNT\r\n';
-        csv += `Principal and Interest,$${pi.toFixed(2)}\r\n`;
-        csv += `Property Taxes,$${tax.toFixed(2)}\r\n`;
-        csv += `Homeowner Insurance,$${ins.toFixed(2)}\r\n`;
-        csv += `Mortgage Insurance (PMI),$${pmi.toFixed(2)}\r\n`;
-        csv += `HOA Dues,$${hoa.toFixed(2)}\r\n`;
-        csv += `TOTAL MONTHLY PAYMENT (PITI),$${total.toFixed(2)}\r\n`;
-        csv += `Total Lifetime Interest Paid,$${sched.totalInterest.toFixed(2)}\r\n\r\n`;
-
-        csv += 'AMORTIZATION SCHEDULE (ANNUAL)\r\n';
-        csv += 'Year,Principal Paid,Interest Paid,Cumulative Interest,Ending Balance\r\n';
-        sched.scheduleYears.forEach(y => {
-          csv += `${y.year},$${Math.round(y.principalPaid)},$${Math.round(y.interestPaid)},$${Math.round(y.cumulativeInterest)},$${Math.round(y.endingBalance)}\r\n`;
-        });
+        csv += 'PARAMETER,VALUE\r\n';
+        csv += `Gross Annual Income,$${a.annualIncome}\r\n`;
+        csv += `Monthly Debt Obligations,$${a.monthlyDebts}\r\n`;
+        csv += `Down Payment Cash Available,$${a.cashAvailable}\r\n`;
+        csv += `DTI Ceiling Tier,${a.dtiCeiling}%\r\n`;
+        csv += `Max Monthly Housing Budget,$${maxHousing.toFixed(2)}\r\n`;
+        csv += `Maximum Affordable Purchase Price,$${Math.round(maxPrice)}\r\n`;
       } else {
         csv += 'Parameter,Value\r\n';
-        csv += `Scenario,${tab}\r\n`;
+        csv += `Active Model,${tab}\r\n`;
         csv += `Estimated Output,$2539.28\r\n`;
       }
 
