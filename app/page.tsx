@@ -454,7 +454,7 @@ export default function HomePage() {
         <Container>
           <SectionHeading
             align="center"
-            eyebrow="The Northstar Journey"
+            eyebrow="The Mortgage Level Journey"
             title="Four Steps from Pre-Approval to Closing Day"
             subtitle="We removed traditional retail delays, lengthy paperwork games, and unexpected lender charges."
           />
@@ -534,7 +534,7 @@ export default function HomePage() {
                 Institutional Power with Boutique Client Care.
               </h2>
               <p className="text-base text-slate-300 leading-relaxed">
-                As a direct mortgage banker, we originate, underwrite, and fund loans without bureaucratic middle brokerage markups. When you partner with Northstar, you work with a licensed Senior Lending Officer dedicated to your family&apos;s financial health.
+                As a direct mortgage banker, we originate, underwrite, and fund loans without bureaucratic middle brokerage markups. When you partner with Mortgage Level, you work with a licensed Senior Lending Officer dedicated to your family&apos;s financial health.
               </p>
 
               <div className="space-y-4 pt-2">

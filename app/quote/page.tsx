@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/config/siteConfig";
 import { VonkQuoteWizard } from "@/components/forms/VonkQuoteWizard";
 
 export const metadata: Metadata = {
-  title: "Get an Instant Mortgage Rate & Payment Quote | Northstar Mortgage",
+  title: "Get an Instant Mortgage Rate & Payment Quote | Mortgage Level",
   description:
     "Receive a customized monthly payment breakdown, current interest rate quote, and program match in under 2 minutes. Free, secure, and zero credit score impact.",
 };
@@ -95,7 +95,7 @@ export default function QuotePage() {
               {/* Guarantees & Disclosures Card */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3.5 text-xs text-slate-600">
                 <h4 className="font-heading font-bold text-sm text-navy-midnight pb-2 border-b border-slate-100">
-                  The Northstar Lending Promise
+                  The Mortgage Level Lending Promise
                 </h4>
 
                 <div className="flex items-start gap-2.5">

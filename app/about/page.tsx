@@ -9,9 +9,9 @@ import { siteConfig } from "@/lib/config/siteConfig";
 import { photoLibrary } from "@/content/assets";
 
 export const metadata: Metadata = {
-  title: "About Northstar Mortgage | Premier American Residential Lending",
+  title: "About Mortgage Level | Premier American Residential Lending",
   description:
-    "Learn about Northstar Mortgage Capital, our executive leadership desk, correspondent banking advantages, and our decade-long commitment to transparent home financing.",
+    "Learn about Mortgage Level, our executive leadership desk, correspondent banking advantages, and our decade-long commitment to transparent home financing.",
 };
 
 interface Leader {
@@ -29,7 +29,7 @@ const leadershipTeam: Leader[] = [
     role: "Senior Vice President of Residential Lending",
     nmls: "847291",
     experience: "19 Years Experience",
-    bio: "David oversees national purchase origination and capital markets pricing. Prior to founding Northstar's retail group, he managed correspondent pipelines for tier-one financial institutions across the Southeast.",
+    bio: "David oversees national purchase origination and capital markets pricing. Prior to founding Mortgage Level's retail group, he managed correspondent pipelines for tier-one financial institutions across the Southeast.",
     avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
   },
   {
@@ -63,7 +63,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 z-0 opacity-20">
           <Image
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=85"
-            alt="Northstar Mortgage financial headquarters and modern corporate architectural skyline"
+            alt="Mortgage Level financial headquarters and modern corporate architectural skyline"
             fill
             priority
             className="object-cover object-center"
@@ -105,7 +105,7 @@ export default function AboutPage() {
                 <div className="relative h-80 sm:h-96 w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-navy-light/50">
                   <Image
                     src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
-                    alt="Northstar Mortgage modern executive headquarters and lending operations room"
+                    alt="Mortgage Level modern executive headquarters and lending operations room"
                     fill
                     className="object-cover"
                   />
@@ -174,7 +174,7 @@ export default function AboutPage() {
                 Traditional retail depository banks are notoriously bureaucratic, routing loan files through remote out-of-state underwriting queues that take 45 to 60 days. Third-party mortgage brokers, on the other hand, lack direct funding control and add substantial brokerage fee markups.
               </p>
               <p className="text-base text-slate-600 leading-relaxed">
-                As a <strong>Direct Correspondent Banker</strong>, Northstar funds loans with our own warehouse credit lines and underwrites directly with in-house decision makers. This eliminates the middleman, drives down borrower interest rates, and enables guaranteed 19-day average clear-to-close commitments.
+                As a <strong>Direct Correspondent Banker</strong>, Mortgage Level funds loans with our own warehouse credit lines and underwrites directly with in-house decision makers. This eliminates the middleman, drives down borrower interest rates, and enables guaranteed 19-day average clear-to-close commitments.
               </p>
 
               <div className="pt-2 grid grid-cols-2 gap-4">

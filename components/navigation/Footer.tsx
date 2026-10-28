@@ -93,7 +93,7 @@ export function Footer() {
               Company & Legal
             </h4>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Northstar</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About Mortgage Level</Link></li>
               <li><Link href="/team" className="hover:text-white transition-colors">Our Lending Officers</Link></li>
               <li><Link href="/quote" className="hover:text-white transition-colors">Request a Quote</Link></li>
               <li><Link href="/reviews" className="hover:text-white transition-colors">Borrower Testimonials</Link></li>

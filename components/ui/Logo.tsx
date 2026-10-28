@@ -39,7 +39,7 @@ export function Logo({
     <Link
       href="/"
       className={`inline-flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brass rounded-md py-1 transition-opacity hover:opacity-95 ${className}`}
-      aria-label="Northstar Mortgage Home"
+      aria-label="Mortgage Level Home"
     >
       {/* Precision Geometric Financial Star / Compass SVG Icon */}
       <div className="relative flex-shrink-0 flex items-center justify-center">
@@ -123,12 +123,12 @@ export function Logo({
             isDark ? "text-navy-midnight" : "text-white"
           }`}
         >
-          NORTHSTAR
+          MORTGAGE
         </span>
         <span
-          className={`font-heading font-bold uppercase tracking-[0.24em] ${sizeConfig.subSize} text-brass mt-0.5`}
+          className={`font-heading font-bold uppercase tracking-[0.26em] ${sizeConfig.subSize} text-brass mt-0.5`}
         >
-          MORTGAGE
+          LEVEL
         </span>
       </div>
     </Link>

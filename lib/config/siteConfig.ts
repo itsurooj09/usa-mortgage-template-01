@@ -69,10 +69,10 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   brand: {
-    name: "Northstar Mortgage",
-    legalName: "Northstar Mortgage Capital, LLC",
+    name: "Mortgage Level",
+    legalName: "Mortgage Level, LLC",
     tagline: "Clear paths to homeownership through precision American mortgage lending.",
-    description: "Northstar Mortgage is a premier residential mortgage lender dedicated to providing transparent loan solutions, competitive rates, and seamless digital closing experiences across the United States.",
+    description: "Mortgage Level is a premier residential mortgage lender dedicated to providing transparent loan solutions, competitive rates, and seamless digital closing experiences across the United States.",
     nmlsId: "1948271",
     nmlsConsumerAccessUrl: "https://www.nmlsconsumeraccess.org/",
     foundedYear: 2011,
@@ -81,7 +81,7 @@ export const siteConfig: SiteConfig = {
   contact: {
     phone: "1-800-555-8290",
     phoneFormatted: "(800) 555-8290",
-    email: "inquiries@northstarmortgage.com",
+    email: "inquiries@mortgagelevel.com",
     address: {
       street: "1200 Financial Plaza",
       suite: "Suite 450",
@@ -97,7 +97,7 @@ export const siteConfig: SiteConfig = {
     title: "Senior Vice President of Residential Lending",
     nmlsId: "847291",
     phone: "(800) 555-8290",
-    email: "dvance@northstarmortgage.com",
+    email: "dvance@mortgagelevel.com",
     bio: "With over 18 years of residential mortgage experience, David has guided thousands of American families through conventional, jumbo, VA, and FHA financing. He specializes in tailored loan structuring, transparent rate advisory, and rapid 21-day closing workflows.",
     experienceYears: 18,
     avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80",

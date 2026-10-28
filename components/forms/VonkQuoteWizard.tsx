@@ -1003,7 +1003,7 @@ export function VonkQuoteWizard() {
                 className="mt-0.5 accent-navy-midnight w-4 h-4 cursor-pointer"
               />
               <label htmlFor="tcpa" className="cursor-pointer leading-relaxed">
-                By checking this box, I authorize Northstar Mortgage to deliver telephone calls, automated SMS messages, and emails regarding my loan quote to the contact info provided above. Consent is not a condition of loan approval.
+                By checking this box, I authorize Mortgage Level to deliver telephone calls, automated SMS messages, and emails regarding my loan quote to the contact info provided above. Consent is not a condition of loan approval.
               </label>
             </div>
 

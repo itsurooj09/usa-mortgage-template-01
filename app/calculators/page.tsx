@@ -169,7 +169,7 @@ export default function CalculatorsOverviewPage({
       <section className="pt-2 text-xs text-slate-500 text-center">
         <Container size="narrow">
           <p className="leading-relaxed">
-            All calculations provided by Northstar Mortgage are for illustrative and planning purposes only. Loan approval, interest rates, and final terms are subject to verified underwriter review of income, assets, property appraisal, and credit qualifications. Equal Housing Opportunity Lender.
+            All calculations provided by Mortgage Level are for illustrative and planning purposes only. Loan approval, interest rates, and final terms are subject to verified underwriter review of income, assets, property appraisal, and credit qualifications. Equal Housing Opportunity Lender.
           </p>
         </Container>
       </section>

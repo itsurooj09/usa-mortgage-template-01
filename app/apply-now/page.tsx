@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/TrustBadges";
 
 export const metadata: Metadata = {
-  title: "Online Loan Application (Form 1003) | Northstar Mortgage",
+  title: "Online Loan Application (Form 1003) | Mortgage Level",
   description:
-    "Launch your official Uniform Residential Loan Application (URLA / Form 1003) through Northstar Mortgage's secure 256-bit encrypted origination portal. Direct correspondent underwriter review in 24 hours.",
+    "Launch your official Uniform Residential Loan Application (URLA / Form 1003) through Mortgage Level's secure 256-bit encrypted origination portal. Direct correspondent underwriter review in 24 hours.",
 };
 
 export default function ApplyNowPage({
@@ -142,7 +142,7 @@ export default function ApplyNowPage({
                   <PrivacySecurityGuaranteedBadge />
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Northstar Mortgage operates under rigorous federal regulatory standards (Gramm-Leach-Bliley Act & TILA). Your non-public personal information (NPI) is encrypted end-to-end and strictly protected. We never sell or share borrower data with third-party telemarketers.
+                  Mortgage Level operates under rigorous federal regulatory standards (Gramm-Leach-Bliley Act & TILA). Your non-public personal information (NPI) is encrypted end-to-end and strictly protected. We never sell or share borrower data with third-party telemarketers.
                 </p>
               </div>
 
