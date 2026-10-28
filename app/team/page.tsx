@@ -55,9 +55,15 @@ export default function TeamPage() {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Badge variant="brass" size="sm">
-                        NMLS #{member.nmlsId}
-                      </Badge>
+                      {member.nmlsId ? (
+                        <Badge variant="brass" size="sm">
+                          NMLS #{member.nmlsId}
+                        </Badge>
+                      ) : (
+                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                          Operations Desk
+                        </span>
+                      )}
                       <h3 className="font-heading font-bold text-xl text-navy-midnight pt-1">
                         {member.name}
                       </h3>

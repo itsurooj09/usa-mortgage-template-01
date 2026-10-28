@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
-import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
   title: "FHA Loan Calculator | 3.5% Down & Upfront/Annual MIP",
@@ -10,38 +9,37 @@ export const metadata: Metadata = {
     "Calculate FHA monthly mortgage payments with 3.5% down, 1.75% Upfront MIP, and HUD Mortgagee Letter annual MIP rates.",
 };
 
-const fhaFaqs = [
-  {
-    question: "What is the difference between Upfront MIP and Annual MIP?",
-    answer: "Upfront MIP (UFMIP) is a one-time charge of 1.75% of your base loan amount, which is financed directly into the mortgage balance at closing. Annual MIP is an ongoing insurance premium (typically 0.55% of the loan amount annually) divided into 12 equal monthly installments added to your mortgage bill.",
-  },
-  {
-    question: "Can FHA mortgage insurance ever be removed?",
-    answer: "Under HUD rules, if you put down less than 10%, FHA annual MIP remains for the life of the loan. However, once you accumulate 20% equity through market appreciation and principal reduction, you can refinance into a conventional mortgage to eliminate mortgage insurance entirely.",
-  },
-  {
-    question: "What is the minimum down payment for an FHA loan?",
-    answer: "Borrowers with a credit score of 580 or higher qualify for the minimum 3.5% down payment. Borrowers with credit scores between 500 and 579 require a 10% down payment.",
-  },
-];
-
 export default function FhaLoanCalculatorPage() {
   return (
-    <div className="py-12 bg-ivory-warm min-h-screen">
-      <Container>
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
-          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
-            <VonkMasterCalculatorSuite initialTab="afford" />
-          </Suspense>
-        </div>
+    <div className="bg-ivory-warm min-h-screen pb-20">
+      {/* Top Hero Banner */}
+      <section className="bg-navy-midnight text-white py-12 lg:py-16 border-b border-navy-light/40">
+        <Container>
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass/15 text-brass text-xs font-bold uppercase tracking-wider">
+              <span>Financial Decision Tool</span>
+              <span className="text-slate-500">•</span>
+              <span>HUD / FHA 3.5% Down Payment Modeling</span>
+            </div>
+            <h1 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+              FHA Loan Calculator
+            </h1>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Model your monthly payments with the minimum 3.5% down payment, 1.75% Upfront Mortgage Insurance Premium (UFMIP), and monthly annual MIP.
+            </p>
+          </div>
+        </Container>
+      </section>
 
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
-            FHA Mortgage Insurance Essentials
-          </h2>
-          <Accordion items={fhaFaqs} />
-        </div>
-      </Container>
+      <section className="py-12 sm:py-16">
+        <Container>
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
+            <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+              <VonkMasterCalculatorSuite initialTab="afford" />
+            </Suspense>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }

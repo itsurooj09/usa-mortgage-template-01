@@ -81,9 +81,9 @@ export function Header() {
             <span>NMLS #{siteConfig.brand.nmlsId} • Equal Housing Lender</span>
           </div>
           <div className="flex items-center gap-5">
-            <Link href="/mortgage-rates" className="hover:text-brass transition-colors flex items-center gap-1">
-              <span>Today&apos;s Benchmark Rates</span>
-              <span className="text-[10px] bg-navy-light text-brass px-1.5 py-0.2 rounded font-semibold">Live</span>
+            <Link href="/quote" className="hover:text-brass transition-colors flex items-center gap-1">
+              <span>Instant Rate Quote</span>
+              <span className="text-[10px] bg-navy-light text-brass px-1.5 py-0.2 rounded font-semibold">2 Min</span>
             </Link>
             <Link href="/locations" className="hover:text-white transition-colors">
               Branches & Licenses
@@ -185,18 +185,6 @@ export function Header() {
               Refinance
             </Link>
 
-            {/* Rates */}
-            <Link
-              href="/mortgage-rates"
-              className={`px-3.5 py-2 rounded-md text-sm font-semibold transition-colors ${
-                pathname === "/mortgage-rates"
-                  ? "text-brass bg-navy-light/40"
-                  : "text-slate-200 hover:text-white hover:bg-navy-light/20"
-              }`}
-            >
-              Rates
-            </Link>
-
             {/* Resources Menu */}
             <div
               className="relative"
@@ -237,6 +225,18 @@ export function Header() {
             >
               About
             </Link>
+
+            {/* Contact */}
+            <Link
+              href="/contact"
+              className={`px-3.5 py-2 rounded-md text-sm font-semibold transition-colors ${
+                pathname === "/contact"
+                  ? "text-brass bg-navy-light/40"
+                  : "text-slate-200 hover:text-white hover:bg-navy-light/20"
+              }`}
+            >
+              Contact
+            </Link>
           </nav>
 
           {/* Action CTAs */}
@@ -244,28 +244,28 @@ export function Header() {
             <Button
               href="/apply-now"
               variant="outline"
-              size="sm"
-              className="border-slate-500 text-slate-200 hover:text-white hover:bg-navy-light/40 hover:border-slate-300"
+              size="md"
+              className="border-slate-400/50 text-white hover:bg-white/10 hover:border-white font-semibold transition-colors"
             >
               Apply Now
             </Button>
             <Button
-              href="/get-started"
+              href="/quote"
               variant="brass"
-              size="sm"
-              className="font-bold shadow-sm"
+              size="md"
+              className="font-semibold shadow-sm hover:shadow transition-all"
             >
-              Get Pre-Approved
+              Get a Quote
             </Button>
           </div>
 
           {/* Mobile Menu Hamburger Button */}
           <div className="flex lg:hidden items-center gap-2">
             <Link
-              href="/get-started"
-              className="bg-brass text-navy-deep font-bold text-xs px-3 py-2 rounded-md"
+              href="/quote"
+              className="bg-brass text-navy-deep font-semibold text-xs px-3.5 py-2 rounded-md shadow-sm"
             >
-              Pre-Approve
+              Get a Quote
             </Link>
             <button
               type="button"
@@ -553,14 +553,14 @@ export function Header() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
             <div className="grid grid-cols-4 gap-6">
               <Link
-                href="/mortgage-rates"
+                href="/quote"
                 className="p-4 rounded-xl bg-navy-dark/60 hover:bg-navy-dark border border-navy-light/30 hover:border-brass/40 transition-all group"
               >
                 <div className="text-sm font-bold text-white group-hover:text-brass">
-                  Mortgage Rates Page
+                  Get an Instant Quote
                 </div>
                 <p className="text-xs text-slate-300 mt-1">
-                  Weekly Freddie Mac benchmark averages, APRs, and rate lock advisory.
+                  Customized rate, monthly payment, and closing breakdown in under 2 minutes.
                 </p>
               </Link>
 
@@ -698,10 +698,11 @@ export function Header() {
             </Link>
 
             <Link
-              href="/mortgage-rates"
-              className="py-2 text-white font-semibold text-base border-b border-navy-light/20"
+              href="/quote"
+              className="py-2 text-brass font-semibold text-base border-b border-navy-light/20 flex items-center justify-between"
             >
-              Mortgage Rates
+              <span>Get a Quote</span>
+              <span className="text-xs bg-brass/20 text-brass px-2 py-0.5 rounded font-bold">Fast</span>
             </Link>
 
             <Link

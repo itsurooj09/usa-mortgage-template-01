@@ -27,7 +27,7 @@ export default function ApplyNowPage({
   return (
     <div className="bg-ivory-warm min-h-screen">
       {/* 1. Brand-Aligned Hero Header (Navy Midnight #10243A) */}
-      <section className="bg-navy-midnight text-white pt-14 pb-18 px-4 relative overflow-hidden border-b border-navy-light/40">
+      <section className="bg-navy-midnight text-white pt-16 pb-20 lg:pt-20 lg:pb-24 px-4 relative overflow-hidden border-b border-navy-light/40">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C5A46D_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         
         <Container className="relative z-10">

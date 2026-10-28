@@ -12,7 +12,6 @@ import { loanProducts } from "@/content/loans";
 import { currentRates, rateMetadata } from "@/content/rates";
 import { testimonialsData } from "@/content/testimonials";
 import { allFaqs } from "@/content/faqs";
-import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
 import { Accordion } from "@/components/ui/Accordion";
 import { photoLibrary } from "@/content/assets";
 
@@ -245,7 +244,7 @@ export default function HomePage() {
                     <span>Payment Calculator</span>
                     <span className="text-xs text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Full PITI and 30-year amortization table.</p>
+                  <p className="text-sm text-slate-500 mt-1">Full PITI and 30-year amortization table.</p>
                 </Link>
 
                 <Link
@@ -256,7 +255,7 @@ export default function HomePage() {
                     <span>Affordability Calculator</span>
                     <span className="text-xs text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Max purchase price from income and debts.</p>
+                  <p className="text-sm text-slate-500 mt-1">Max purchase price from income and debts.</p>
                 </Link>
 
                 <Link
@@ -267,7 +266,7 @@ export default function HomePage() {
                     <span>Refinance Savings</span>
                     <span className="text-xs text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Monthly savings & break-even recoup months.</p>
+                  <p className="text-sm text-slate-500 mt-1">Monthly savings & break-even recoup months.</p>
                 </Link>
 
                 <Link
@@ -278,7 +277,7 @@ export default function HomePage() {
                     <span>Closing Costs Estimator</span>
                     <span className="text-xs text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">Loan Estimate sections A-H & cash to close.</p>
+                  <p className="text-sm text-slate-500 mt-1">Loan Estimate sections A-H & cash to close.</p>
                 </Link>
               </div>
 
@@ -348,7 +347,7 @@ export default function HomePage() {
                     <p className="text-xs text-brass font-medium italic mt-1">
                       &quot;{featuredHeroLoan.heroTagline}&quot;
                     </p>
-                    <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
+                    <p className="text-base text-slate-300 mt-3 leading-relaxed">
                       {featuredHeroLoan.shortDescription}
                     </p>
 
@@ -406,11 +405,11 @@ export default function HomePage() {
                       {loan.title}
                     </h4>
 
-                    <p className="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+                    <p className="text-sm text-slate-600 mt-2 line-clamp-3 leading-relaxed">
                       {loan.shortDescription}
                     </p>
 
-                    <ul className="mt-3.5 space-y-1 text-xs text-slate-600">
+                    <ul className="mt-3.5 space-y-1 text-sm text-slate-600">
                       {loan.keyBenefits.slice(0, 2).map((b, idx) => (
                         <li key={idx} className="flex items-start gap-1.5">
                           <span className="text-emerald-600 font-bold">✓</span>
@@ -451,7 +450,7 @@ export default function HomePage() {
       </section>
 
       {/* SECTION E: HOMEBUYING JOURNEY (VISUAL TIMELINE WITH PHOTOGRAPHY) */}
-      <section className="py-20 bg-ivory-warm border-y border-border-subtle">
+      <section className="py-20 bg-white border-y border-border-subtle">
         <Container>
           <SectionHeading
             align="center"
@@ -489,7 +488,7 @@ export default function HomePage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl overflow-hidden border border-border-subtle shadow-sm flex flex-col justify-between"
+                className="bg-ivory-warm rounded-2xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between"
               >
                 <div className="relative h-44 w-full">
                   <Image
@@ -506,7 +505,7 @@ export default function HomePage() {
                   <h4 className="font-heading font-bold text-lg text-navy-midnight mb-2">
                     {item.title}
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -515,18 +514,9 @@ export default function HomePage() {
           </div>
 
           <div className="mt-12 text-center">
-            <Button href="/get-started" variant="brass" size="lg" className="font-bold text-navy-deep">
-              Start Step 1: Pre-Approval Survey →
+            <Button href="/quote" variant="brass" size="lg" className="font-bold text-navy-deep">
+              Get an Instant Quote →
             </Button>
-          </div>
-        </Container>
-      </section>
-
-      {/* SECTION F: FEATURED CALCULATOR WORKSTATION */}
-      <section className="py-20 bg-ivory-warm border-y border-slate-200" id="calculators">
-        <Container>
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
-            <VonkMasterCalculatorSuite initialTab="purchase" />
           </div>
         </Container>
       </section>
@@ -554,7 +544,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-white text-base">Average 19-Day Clear-to-Close</h4>
-                    <p className="text-xs text-slate-300 mt-0.5">
+                    <p className="text-sm text-slate-300 mt-1 leading-relaxed">
                       Our in-house underwriting teams eliminate traditional bank delays so you win competitive bids.
                     </p>
                   </div>
@@ -566,7 +556,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-white text-base">Zero Hidden Fees or Rate Surprises</h4>
-                    <p className="text-xs text-slate-300 mt-0.5">
+                    <p className="text-sm text-slate-300 mt-1 leading-relaxed">
                       Your Loan Estimate and Closing Disclosure are thoroughly reviewed line-by-line under TILA standards.
                     </p>
                   </div>
@@ -586,12 +576,12 @@ export default function HomePage() {
             {/* Right Column: Lead Officer Editorial Portrait */}
             <div className="lg:col-span-5">
               <div className="bg-white rounded-2xl p-6 sm:p-8 text-navy-midnight shadow-floating border border-white/80">
-                <div className="relative h-72 sm:h-80 rounded-xl overflow-hidden shadow-card border-2 border-border-subtle mb-5">
+                <div className="relative h-80 sm:h-96 rounded-xl overflow-hidden shadow-card border-2 border-border-subtle mb-5">
                   <Image
                     src={siteConfig.primaryLoanOfficer.avatarUrl}
                     alt={siteConfig.primaryLoanOfficer.name}
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -604,7 +594,7 @@ export default function HomePage() {
                   <p className="text-xs font-semibold text-slate-500">
                     NMLS Unique Identifier #{siteConfig.primaryLoanOfficer.nmlsId}
                   </p>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-sm text-slate-600 mt-2 leading-relaxed">
                     &quot;Our priority is structuring loans that protect your household liquidity, deliver low monthly payments, and get you to the closing table on time.&quot;
                   </p>
                 </div>
@@ -653,7 +643,7 @@ export default function HomePage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                  <p className="text-sm text-slate-700 leading-relaxed italic">
                     &quot;{review.quote}&quot;
                   </p>
                 </div>

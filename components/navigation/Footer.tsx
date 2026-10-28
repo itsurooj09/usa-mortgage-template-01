@@ -12,41 +12,8 @@ export function Footer() {
 
   return (
     <footer className="bg-navy-midnight text-white border-t border-navy-light/40">
-      {/* Top CTA Banner */}
-      <div className="border-b border-navy-light/30 py-12 bg-navy-dark/60">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="max-w-2xl text-center md:text-left">
-              <span className="text-xs font-bold uppercase tracking-wider text-brass">
-                Ready to take the next step?
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-heading font-bold text-white mt-1">
-                Fast, verified pre-approval with competitive national rates.
-              </h3>
-              <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Connect with our licensed loan officers or complete our 2-minute digital qualification questionnaire.
-              </p>
-            </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <Link
-                href="/get-started"
-                className="inline-flex items-center justify-center font-bold text-sm sm:text-base px-6 py-3.5 rounded-md bg-brass text-navy-deep hover:bg-brass-hover transition-colors shadow-sm"
-              >
-                Get Pre-Approved →
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center font-semibold text-sm sm:text-base px-5 py-3.5 rounded-md bg-transparent border border-slate-600 text-slate-200 hover:text-white hover:border-slate-400 transition-colors"
-              >
-                Contact Officer
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Footer Links Columns */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-16">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand & Contact Column */}
           <div className="lg:col-span-2 space-y-4 pr-4">
@@ -128,7 +95,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-slate-300">
               <li><Link href="/about" className="hover:text-white transition-colors">About Northstar</Link></li>
               <li><Link href="/team" className="hover:text-white transition-colors">Our Lending Officers</Link></li>
-              <li><Link href="/mortgage-rates" className="hover:text-white transition-colors">Benchmark Rates</Link></li>
+              <li><Link href="/quote" className="hover:text-white transition-colors">Request a Quote</Link></li>
               <li><Link href="/reviews" className="hover:text-white transition-colors">Borrower Testimonials</Link></li>
               <li><Link href="/faqs" className="hover:text-white transition-colors">Mortgage FAQs</Link></li>
               <li><Link href="/resources" className="hover:text-white transition-colors">Articles & Insights</Link></li>

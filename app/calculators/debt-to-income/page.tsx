@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
-import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
   title: "Debt-to-Income (DTI) Calculator | Front-End & Back-End Ratios",
@@ -10,38 +9,37 @@ export const metadata: Metadata = {
     "Analyze your Front-End (housing) and Back-End (total debt) DTI ratios against Fannie Mae, Freddie Mac, FHA, and VA underwriting guidelines.",
 };
 
-const dtiFaqs = [
-  {
-    question: "What is the difference between Front-End DTI and Back-End DTI?",
-    answer: "Front-End DTI calculates the percentage of your gross monthly income dedicated solely to your proposed housing costs (PITI + HOA). Back-End DTI calculates the percentage of your gross monthly income required to pay all recurring debt obligations combined (housing costs plus car loans, student loans, credit card minimums, and personal loans).",
-  },
-  {
-    question: "What is the maximum allowed DTI ratio for a conventional mortgage?",
-    answer: "Under Fannie Mae and Freddie Mac automated underwriting (Desktop Underwriter / Loan Product Advisor), the standard conforming threshold is 43% to 45%. Borrowers with strong compensating factors (740+ credit scores, 6+ months of reserves, and 20%+ equity) can sometimes receive approval up to 50%.",
-  },
-  {
-    question: "How can I lower my DTI before applying for a mortgage?",
-    answer: "You can lower your DTI by paying off small revolving credit card balances, paying down installment loans with 10 or fewer payments remaining, or adding a qualifying co-borrower to your mortgage application.",
-  },
-];
-
 export default function DtiCalculatorPage() {
   return (
-    <div className="py-12 bg-ivory-warm min-h-screen">
-      <Container>
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
-          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
-            <VonkMasterCalculatorSuite initialTab="afford" />
-          </Suspense>
-        </div>
+    <div className="bg-ivory-warm min-h-screen pb-20">
+      {/* Top Hero Banner */}
+      <section className="bg-navy-midnight text-white py-12 lg:py-16 border-b border-navy-light/40">
+        <Container>
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass/15 text-brass text-xs font-bold uppercase tracking-wider">
+              <span>Financial Decision Tool</span>
+              <span className="text-slate-500">•</span>
+              <span>Front-End & Back-End Ratio Underwriting Analysis</span>
+            </div>
+            <h1 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+              Debt-to-Income (DTI) Calculator
+            </h1>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Calculate your Front-End housing ratio and Back-End total debt ratio against conforming Fannie Mae, Freddie Mac, and FHA automated underwriting approval benchmarks.
+            </p>
+          </div>
+        </Container>
+      </section>
 
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
-            Underwriting Benchmarks & Guidelines
-          </h2>
-          <Accordion items={dtiFaqs} />
-        </div>
-      </Container>
+      <section className="py-12 sm:py-16">
+        <Container>
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
+            <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+              <VonkMasterCalculatorSuite initialTab="afford" />
+            </Suspense>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }

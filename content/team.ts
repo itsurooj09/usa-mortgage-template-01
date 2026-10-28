@@ -2,7 +2,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  nmlsId: string;
+  nmlsId?: string;
   phone: string;
   email: string;
   avatarUrl: string;
@@ -56,7 +56,6 @@ export const teamMembers: TeamMember[] = [
     id: "sarah-mitchell",
     name: "Sarah Mitchell",
     role: "Director of Mortgage Operations & Underwriting Liaison",
-    nmlsId: "1482019",
     phone: "(800) 555-8293",
     email: "smitchell@northstarmortgage.com",
     avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",

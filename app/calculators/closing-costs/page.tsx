@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
-import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
   title: "Closing Costs Calculator | Cash-to-Close Itemized Estimator",
@@ -10,38 +9,37 @@ export const metadata: Metadata = {
     "Estimate your total closing costs, lender fees, title services, transfer taxes, and initial escrow prepaids under CFPB TRID Loan Estimate guidelines.",
 };
 
-const closingFaqs = [
-  {
-    question: "What is the difference between closing costs and prepaids?",
-    answer: "Closing costs are one-time administrative and legal fees paid to lenders, title companies, and county governments to process and record your mortgage. Prepaids are not fees; they are advance payments of your own property taxes and homeowners insurance policy placed into an escrow reserve account so your loan servicer can pay your annual bills on your behalf.",
-  },
-  {
-    question: "Can the seller pay my closing costs?",
-    answer: "Yes, via seller concessions negotiated in your purchase contract. Conventional guidelines permit up to 3% seller concessions with less than 10% down, and FHA/USDA guidelines permit up to 6%.",
-  },
-  {
-    question: "What is cash-to-close?",
-    answer: "Cash-to-close is the total liquid funds you must bring to the title company or closing attorney on closing day. Formula: Cash to Close = Down Payment + Net Closing Costs - Earnest Money Deposit.",
-  },
-];
-
 export default function ClosingCostsPage() {
   return (
-    <div className="py-12 bg-ivory-warm min-h-screen">
-      <Container>
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
-          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
-            <VonkMasterCalculatorSuite initialTab="purchase" />
-          </Suspense>
-        </div>
+    <div className="bg-ivory-warm min-h-screen pb-20">
+      {/* Top Hero Banner */}
+      <section className="bg-navy-midnight text-white py-12 lg:py-16 border-b border-navy-light/40">
+        <Container>
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass/15 text-brass text-xs font-bold uppercase tracking-wider">
+              <span>Financial Decision Tool</span>
+              <span className="text-slate-500">•</span>
+              <span>TRID Itemized Settlement Fee Estimator</span>
+            </div>
+            <h1 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+              Closing Costs Calculator
+            </h1>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Estimate your total out-of-pocket cash to close, including non-shoppable lender fees, title insurance premiums, transfer taxes, and advance escrow reserves.
+            </p>
+          </div>
+        </Container>
+      </section>
 
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
-            Understanding Your Loan Estimate Sections
-          </h2>
-          <Accordion items={closingFaqs} />
-        </div>
-      </Container>
+      <section className="py-12 sm:py-16">
+        <Container>
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
+            <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+              <VonkMasterCalculatorSuite initialTab="purchase" />
+            </Suspense>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }

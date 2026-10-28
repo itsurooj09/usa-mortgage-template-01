@@ -80,7 +80,7 @@ export const blogPosts: BlogPost[] = [
     },
     publishedDate: "September 29, 2026",
     readingTime: "7 min read",
-    featuredImage: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?auto=format&fit=crop&w=1200&q=80",
+    featuredImage: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
     keyTakeaways: [
       "VA loans offer true 100% financing with zero down payment required.",
       "No monthly private mortgage insurance (PMI or MIP) is ever charged on a VA loan.",

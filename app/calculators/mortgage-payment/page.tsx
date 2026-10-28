@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { VonkMasterCalculatorSuite } from "@/components/calculators/VonkMasterCalculatorSuite";
-import { Accordion } from "@/components/ui/Accordion";
 
 export const metadata: Metadata = {
   title: "Mortgage Payment Calculator | Principal, Interest, Taxes & PMI",
@@ -10,53 +9,37 @@ export const metadata: Metadata = {
     "Calculate your monthly mortgage payment with principal, interest, taxes, insurance, and cancellable PMI. View full 30-year amortization schedule.",
 };
 
-const calcFaqs = [
-  {
-    question: "How is monthly principal and interest calculated?",
-    answer: "Principal and interest are calculated using the standard amortization formula: M = P[r(1+r)^n] / [(1+r)^n - 1], where P is the loan principal, r is the monthly interest rate, and n is the total number of monthly payments (e.g. 360 months for a 30-year mortgage).",
-  },
-  {
-    question: "When does Private Mortgage Insurance (PMI) get removed?",
-    answer: "Under the federal Homeowners Protection Act, you can request PMI cancellation when your loan balance reaches 80% of the original home value, and your lender must automatically cancel it at 78% LTV.",
-  },
-  {
-    question: "How are property taxes estimated?",
-    answer: "Our calculator applies a default 1.1% national average annual property tax rate, adjustable to your municipality's specific millage rate.",
-  },
-];
-
 export default function MortgagePaymentCalculatorPage() {
   return (
-    <div className="py-12 bg-ivory-warm min-h-screen">
-      <Container>
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl mb-12">
-          <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
-            <VonkMasterCalculatorSuite initialTab="purchase" />
-          </Suspense>
-        </div>
-
-        {/* Informational Guidance */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading font-bold text-2xl text-navy-midnight mb-4">
-            Understanding Your Monthly Payment Components (PITI)
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 mb-10">
-            <div className="p-4 rounded-xl bg-white border border-border-subtle">
-              <strong className="text-navy-midnight block text-base font-heading mb-1">
-                Principal & Interest (P&I)
-              </strong>
-              The principal pays down your original loan balance, while interest compensates the lender. In the early years, the majority of your payment covers interest.
+    <div className="bg-ivory-warm min-h-screen pb-20">
+      {/* Top Hero Banner */}
+      <section className="bg-navy-midnight text-white py-12 lg:py-16 border-b border-navy-light/40">
+        <Container>
+          <div className="max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brass/15 text-brass text-xs font-bold uppercase tracking-wider">
+              <span>Financial Decision Tool</span>
+              <span className="text-slate-500">•</span>
+              <span>Complete PITI & Amortization Schedules</span>
             </div>
-            <div className="p-4 rounded-xl bg-white border border-border-subtle">
-              <strong className="text-navy-midnight block text-base font-heading mb-1">
-                Taxes & Insurance (T&I)
-              </strong>
-              Property taxes and homeowners hazard insurance are held in escrow reserves and disbursed annually by your loan servicer on your behalf.
-            </div>
+            <h1 className="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+              Mortgage Payment Calculator
+            </h1>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              Calculate your exact monthly principal and interest payment along with itemized estimates for real estate taxes, hazard insurance, and cancellable PMI.
+            </p>
           </div>
-          <Accordion items={calcFaqs} />
-        </div>
-      </Container>
+        </Container>
+      </section>
+
+      <section className="py-12 sm:py-16">
+        <Container>
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
+            <Suspense fallback={<div className="p-16 text-center text-slate-500">Loading calculator suite...</div>}>
+              <VonkMasterCalculatorSuite initialTab="purchase" />
+            </Suspense>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }
